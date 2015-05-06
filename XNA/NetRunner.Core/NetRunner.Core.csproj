@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{44A03009-6D94-45F8-8697-0DA528F95494}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NetRunner.Core</RootNamespace>
+    <AssemblyName>NetRunner.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaProfile>Reach</XnaProfile>
+    <XnaCrossPlatformGroupID>a303573b-709e-4f74-be78-aabbd76969ea</XnaCrossPlatformGroupID>
+    <XnaOutputType>Library</XnaOutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Net" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CardFactory.cs" />
+    <Compile Include="Card.cs" />
+    <Compile Include="Conditions\Always.cs" />
+    <Compile Include="Conditions\Condition.cs" />
+    <Compile Include="Conditions\Not.cs" />
+    <Compile Include="Conditions\RunnerBreaksAllSubroutinesOnIce.cs" />
+    <Compile Include="ContinuousEffects\ModifyIceStrength.cs" />
+    <Compile Include="Conditions\CurrentRun.cs" />
+    <Compile Include="DamageType.cs" />
+    <Compile Include="GameContextEventArgs.cs" />
+    <Compile Include="IceEventArgs.cs" />
+    <Compile Include="IceTypes.cs" />
+    <Compile Include="IdentifierPredicates\MultipleItemPredicate.cs" />
+    <Compile Include="IdentifierPredicates\SingleItemPredicate.cs" />
+    <Compile Include="IdentifierPredicates\NextPieceOfIce.cs" />
+    <Compile Include="IdentifierPredicates\ThisCard.cs" />
+    <Compile Include="ContinuousEffects\ContinuousEffect.cs" />
+    <Compile Include="CorporationCard.cs" />
+    <Compile Include="CorporationFaction.cs" />
+    <Compile Include="Effect.cs" />
+    <Compile Include="InstantEffects\AddCredits.cs" />
+    <Compile Include="EventCard.cs" />
+    <Compile Include="GameContext.cs" />
+    <Compile Include="Ice.cs" />
+    <Compile Include="InstantEffects\DamageTheRunner.cs" />
+    <Compile Include="InstantEffects\InstantEffect.cs" />
+    <Compile Include="Intents\ModifyIceIntent.cs" />
+    <Compile Include="PlayerType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Run.cs" />
+    <Compile Include="RunnerCard.cs" />
+    <Compile Include="RunnerFaction.cs" />
+    <Compile Include="Subroutine.cs" />
+    <Compile Include="Triggers\IceEncounterEnds.cs" />
+    <Compile Include="Triggers\PostTrigger.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>

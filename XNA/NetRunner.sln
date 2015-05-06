@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Core", "NetRunner.Core\NetRunner.Core.csproj", "{44A03009-6D94-45F8-8697-0DA528F95494}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.UI.Console", "NetRunner.UI.Console\NetRunner.UI.Console.csproj", "{4C03D0FB-4542-46F6-BA77-587E2FEFD220}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Debug|x86.ActiveCfg = Debug|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Debug|x86.Build.0 = Debug|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Release|Any CPU.ActiveCfg = Release|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Release|Mixed Platforms.Build.0 = Release|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Release|x86.ActiveCfg = Release|x86
+		{44A03009-6D94-45F8-8697-0DA528F95494}.Release|x86.Build.0 = Release|x86
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
