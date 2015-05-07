@@ -1,4 +1,5 @@
-﻿using NetRunner.Core.IdentifierPredicates;
+﻿using NetRunner.Core.Corporation;
+using NetRunner.Core.Selectors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,40 +9,34 @@ namespace NetRunner.Core.Conditions
 {
     public class RunnerBreaksAllSubroutinesOnIce : Condition
     {
-        private SingleItemPredicate<Ice> mIcePredicate;
-        private Ice mIce;
-        private int mBrokenSubRoutineCount;
+        private ISelector<PieceOfIce> mIceSelector;
 
-        public RunnerBreaksAllSubroutinesOnIce(SingleItemPredicate<Ice> icePredicate)
+        public RunnerBreaksAllSubroutinesOnIce(ISelector<PieceOfIce> iceSelector)
         {
-            mIcePredicate = icePredicate;
-            mBrokenSubRoutineCount = 0;
+            mIceSelector = iceSelector;
         }
 
         public override void Resolve(GameContext context)
         {
             base.Resolve(context);
-            mIcePredicate.Resolve(context);
-
-            mIcePredicate.ItemAcquired += ItemAcquired;
+            mIceSelector.Resolve(context);
         }
 
-        private void ItemAcquired(object sender, GameContextEventArgs e)
+        public override ConditionStatus IsActive(GameContext context)
         {
-            GameContext context = e.Context;
+            if (!mIceSelector.IsResolved)
+            {
+                return ConditionStatus.NotApplicable;
+            }
 
-            mIce = mIcePredicate.GetItem(context);
-            context.SubRoutineBroken += SubRoutineBroken;
-        }
-
-        private void SubRoutineBroken(object sender, GameContextEventArgs e)
-        {
-            mBrokenSubRoutineCount++;
-        }
-
-        public override bool IsActive(GameContext context)
-        {
-            return mIce != null && mBrokenSubRoutineCount == mIce.SubRoutines.Count;
+            if (mIceSelector.Items.All(i => i.SubRoutines.All(s => s.IsBroken)))
+            {
+                return ConditionStatus.Active;
+            }
+            else
+            {
+                return ConditionStatus.Inactive;
+            }
         }
     }
 }

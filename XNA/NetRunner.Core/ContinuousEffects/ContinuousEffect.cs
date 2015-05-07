@@ -1,4 +1,5 @@
-﻿using NetRunner.Core.Intents;
+﻿using NetRunner.Core.Corporation;
+using NetRunner.Core.Intents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ namespace NetRunner.Core.ContinuousEffects
     {
         public override void Execute(GameContext context)
         {
-            // TODO: Add effect to the context's list of continuous effects.
+            context.ActiveContinuousEffects.Add(this);
         }
 
-        public virtual void ModifyIceIntent(GameContext context, ModifyIceIntent intent) { }
+        public virtual void ModifyIceIntent(GameContext context, PieceOfIce pieceOfIce, ModifyIceIntent intent) { }
+
+        public virtual void ModifyRezIntent(GameContext context, IRezableCard rezableCard, ModifyRezIntent intent) { }
     }
 }

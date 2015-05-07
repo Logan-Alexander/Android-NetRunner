@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetRunner.Core
+namespace NetRunner.Core.Corporation
 {
     [Serializable]
     public class IceEventArgs : GameContextEventArgs
     {
-        public Ice Ice { get; private set; }
+        public PieceOfIce Ice { get; private set; }
 
-        public IceEventArgs(GameContext context, Ice ice)
+        public IceEventArgs(GameContext context, PieceOfIce ice)
             : base(context)
         {
             if (ice == null)

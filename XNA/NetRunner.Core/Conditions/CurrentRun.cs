@@ -21,9 +21,20 @@ namespace NetRunner.Core.Conditions
             mRun = context.CurrentRun;
         }
 
-        public override bool IsActive(GameContext context)
+        public override ConditionStatus IsActive(GameContext context)
         {
-            return context.CurrentRun == mRun;
+            if (context.CurrentRun == null)
+            {
+                return ConditionStatus.NotApplicable;
+            }
+            else if (context.CurrentRun == mRun)
+            {
+                return ConditionStatus.Active;
+            }
+            else
+            {
+                return ConditionStatus.Inactive;
+            }
         }
     }
 }

@@ -9,6 +9,6 @@ namespace NetRunner.Core.Conditions
     {
         public virtual void Resolve(GameContext context) { }
 
-        public abstract bool IsActive(GameContext context);
+        public abstract ConditionStatus IsActive(GameContext context);
     }
 }

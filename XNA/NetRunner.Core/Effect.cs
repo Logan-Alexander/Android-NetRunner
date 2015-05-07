@@ -27,7 +27,7 @@ namespace NetRunner.Core
 
         public virtual bool IsActive(GameContext context)
         {
-            return Conditions.All(c => c.IsActive(context));
+            return Conditions.All(c => c.IsActive(context) == ConditionStatus.Active);
         }
     }
 }

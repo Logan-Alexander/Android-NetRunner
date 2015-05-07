@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetRunner.Core
+namespace NetRunner.Core.Corporation
 {
     public class Subroutine
     {
         public List<Effect> Effects;
         public List<PostTrigger> Triggers;
+        public bool IsBroken { get; set; }
 
         public Subroutine()
         {

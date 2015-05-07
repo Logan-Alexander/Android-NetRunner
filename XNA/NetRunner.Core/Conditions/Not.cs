@@ -20,9 +20,22 @@ namespace NetRunner.Core.Conditions
             mCondition.Resolve(context);
         }
 
-        public override bool IsActive(GameContext context)
+        public override ConditionStatus IsActive(GameContext context)
         {
-            return !mCondition.IsActive(context);
+            switch (mCondition.IsActive(context))
+            {
+                case ConditionStatus.NotApplicable:
+                    return ConditionStatus.NotApplicable;
+
+                case ConditionStatus.Active:
+                    return ConditionStatus.Inactive;
+
+                case ConditionStatus.Inactive:
+                    return ConditionStatus.Active;
+
+                default:
+                    throw new NotSupportedException();
+            }
         }
     }
 }

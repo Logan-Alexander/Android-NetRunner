@@ -1,5 +1,6 @@
 ﻿using NetRunner.Core.Conditions;
-using NetRunner.Core.IdentifierPredicates;
+using NetRunner.Core.Corporation;
+using NetRunner.Core.Selectors;
 using NetRunner.Core.Intents;
 using System;
 using System.Collections.Generic;
@@ -10,39 +11,27 @@ namespace NetRunner.Core.ContinuousEffects
 {
     public class ModifyIceStrength : ContinuousEffect
     {
-        private SingleItemPredicate<Ice> mIcePredicate;
-        private Ice mIce;
+        private ISelector<PieceOfIce> mIceSelector;
         private int mAmount;
 
-        public ModifyIceStrength(SingleItemPredicate<Ice> icePredicate, int amount)
+        public ModifyIceStrength(ISelector<PieceOfIce> iceSelector, int amount)
         {
-            mIcePredicate = icePredicate;
+            mIceSelector = iceSelector;
             mAmount = amount;
         }
 
         public override void Resolve(GameContext context)
         {
             base.Resolve(context);
-            mIcePredicate.Resolve(context);
-
-            mIcePredicate.ItemAcquired += ItemAcquired;
+            mIceSelector.Resolve(context);
         }
 
-        private void ItemAcquired(object sender, GameContextEventArgs e)
+        public override void ModifyIceIntent(GameContext context, PieceOfIce ice, ModifyIceIntent intent)
         {
-            GameContext context = e.Context;
-
-            mIce = mIcePredicate.GetItem(context);
-        }
-
-        public override bool IsActive(GameContext context)
-        {
-            return base.IsActive(context) && (mIce != null);
-        }
-
-        public override void ModifyIceIntent(GameContext context, ModifyIceIntent intent)
-        {
-            intent.Strength += mAmount;
+            if (mIceSelector.IsResolved && mIceSelector.Items.Contains(ice))
+            {
+                intent.Strength += mAmount;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NetRunner.Core.IdentifierPredicates;
+﻿using NetRunner.Core.Corporation;
+using NetRunner.Core.Selectors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +9,23 @@ namespace NetRunner.Core.Triggers
 {
     public class IceEncounterEnds : PostTrigger
     {
-        private SingleItemPredicate<Ice> mIcePredicate;
+        private ISelector<PieceOfIce> mIceSelector;
         
-        public IceEncounterEnds(SingleItemPredicate<Ice> icePredicate)
+        public IceEncounterEnds(ISelector<PieceOfIce> iceSelector)
         {
-            mIcePredicate = icePredicate;
+            mIceSelector = iceSelector;
         }
 
         public override void Resolve(GameContext context)
         {
             base.Resolve(context);
-            mIcePredicate.Resolve(context);
+            mIceSelector.Resolve(context);
             context.IceEncounterEnded += IceEncounterEnded;
         }
 
         private void IceEncounterEnded(object sender, IceEventArgs e)
         {
-            if (e.Ice == mIcePredicate.GetItem(e.Context))
+            if (mIceSelector.Items.Contains(e.Ice))
             {
                 Trigger(e.Context);
             }
