@@ -15,7 +15,7 @@ namespace NetRunner.Core.Runner
             mEffects = new List<Effect>();
         }
 
-        internal void AddEffect(Effect effect)
+        public void AddEffect(Effect effect)
         {
             mEffects.Add(effect);
         }
@@ -27,12 +27,13 @@ namespace NetRunner.Core.Runner
                 string message = string.Format("The runner does not have the {0} credits required to play \"{1}\".",
                     Cost, this);
                 
-                throw new InvalidOperationException(message);
+                throw new IllegalActionException(message);
             }
 
             context.RunnerCredits -= Cost;
             
-            // TODO: Move card from grip to heap.
+            context.RemoveFromGrip(this);
+            context.AddToHeap(this);
 
             foreach (Effect effect in mEffects)
             {

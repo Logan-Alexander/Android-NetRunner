@@ -1,5 +1,6 @@
 ﻿using NetRunner.Core.ContinuousEffects;
 using NetRunner.Core.Corporation;
+using NetRunner.Core.Runner;
 using NetRunner.Core.Triggers;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,30 @@ namespace NetRunner.Core
         public GameContext()
         {
             ActiveContinuousEffects = new List<ContinuousEffect>();
+        }
+
+        public virtual void AddToGrip(RunnerCard card)
+        {
+        }
+
+        public virtual void RemoveFromGrip(RunnerCard card)
+        {
+        }
+
+        public virtual void AddToStack(RunnerCard card)
+        {
+        }
+
+        public virtual void RemoveFromStack(RunnerCard card)
+        {
+        }
+
+        public virtual void AddToHeap(RunnerCard card)
+        {
+        }
+
+        public virtual void RemoveFromHeap(RunnerCard card)
+        {
         }
     }
 }

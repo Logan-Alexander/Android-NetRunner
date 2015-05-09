@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Core", "NetRunner
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.UI.Console", "NetRunner.UI.Console\NetRunner.UI.Console.csproj", "{4C03D0FB-4542-46F6-BA77-587E2FEFD220}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRunner.Core.Tests", "NetRunner.Core.Tests\NetRunner.Core.Tests.csproj", "{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,16 @@ Global
 		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4C03D0FB-4542-46F6-BA77-587E2FEFD220}.Release|x86.ActiveCfg = Release|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A03A198D-46B1-4985-8011-6CCDFF3A9DDD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

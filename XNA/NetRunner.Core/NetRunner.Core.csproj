@@ -79,6 +79,7 @@
     <Compile Include="GameContextEventArgs.cs" />
     <Compile Include="Corporation\IceEventArgs.cs" />
     <Compile Include="Corporation\IceTypes.cs" />
+    <Compile Include="IllegalActionException.cs" />
     <Compile Include="InstantEffects\ArrangeTopFiveCardsOfResearchAndDevelopment.cs" />
     <Compile Include="InstantEffects\EndTheRun.cs" />
     <Compile Include="InstantEffects\LoseClicks.cs" />
