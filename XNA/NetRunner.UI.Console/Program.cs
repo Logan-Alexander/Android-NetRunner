@@ -1,6 +1,8 @@
 ﻿using NetRunner.Core;
 using NetRunner.Core.ContinuousEffects;
 using NetRunner.Core.Corporation;
+using NetRunner.Core.GameManagement;
+using NetRunner.Core.GameManagement.InMemory;
 using NetRunner.Core.Intents;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,53 @@ namespace NetRunner.UI.Console
     {
         static void Main(string[] args)
         {
-            DoStuff();
+            //DoStuff();
+
+            // -------- IN AN INTERNET GAME, THIS PART WOULD HAPPEN ON THE WEB SERVER -------- 
+
+            // Create the GameContext. This will hold all information about the game.
+            GameContext gameContext = new GameContext();
+
+            // Create a HostedGame.
+            // This will allow information about the game to be broadcast to all players.
+            // The information sent to the Runner and the Corporation will be different.
+            // For example, when the Corporation draws a card, the Corporation will be told
+            // which card was moved from R&D to Headquarters. The Runner will only be told
+            // that a card was moved.
+            HostedGame hostedGame = new HostedGame(gameContext);
+
+            // An "in-memory" game connector allows information to flow directly from clients
+            // to the hosted game. In a local game, this will be sufficient.
+            // For an internet game, the web server would create an instance
+            // of some connector that implemented the server-side interface.
+            InMemoryGameConnector inMemoryConnector = new InMemoryGameConnector();
+            
+            // Tell the hosted game about our connector so that it handles our requests and
+            // broadcasts information to us.
+            hostedGame.AddCorporationConnector(inMemoryConnector);
+
+            // -------- THIS PART HAPPENS ON EACH PLAYER'S COMPUTER -------- 
+
+            // In an internet game, we would create an instance of a client-side connector here.
+            // However, as this game is in-memory, we can use the same connector which implements
+            // both the server-side and the client-side interfaces.
+            // Creating the connector would require us to provide the hosted games's
+            // URL/IP address, some kind of ID that identifies the game we want to join
+            // and some credentials that identify which player we are.
+
+            // Lastly, create the local game. This game only has partial information and
+            // provides no way for the Corporation to view the Runner's cards by hacking the code.
+            CorporationGame corporationGame = new CorporationGame(inMemoryConnector);
+
+            // Most games have a "game loop" or "pump" which repeatedly alternates calls to
+            // "Draw()" and "Update()". Stuff only happens during the call to Update to avoid
+            // changing anything whilst it is being drawn. XNA handles this for us, but for now
+            // we can simulate it by calling "Update" on our connector.
+            inMemoryConnector.Update();
+
+            // If you execute this code, you'll see that the CorporationGame makes a request
+            // to the hosted game for a copy of the game stste, which it then loads.
+
             System.Console.ReadKey();
         }
 

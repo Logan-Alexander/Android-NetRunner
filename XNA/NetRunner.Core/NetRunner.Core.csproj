@@ -59,8 +59,14 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionEventArgs.cs" />
     <Compile Include="CardFactory.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="ActionBase.cs" />
+    <Compile Include="GameManagement\CorporationGameState.cs" />
+    <Compile Include="GameManagement\CorporationGameStateEventArgs.cs" />
+    <Compile Include="GameManagement\IClient.cs" />
+    <Compile Include="GameManagement\ICorporationConnectorClientSide.cs" />
     <Compile Include="Conditions\Always.cs" />
     <Compile Include="Conditions\Condition.cs" />
     <Compile Include="Conditions\ConditionStatus.cs" />
@@ -70,6 +76,7 @@
     <Compile Include="ContinuousEffects\ModifyIceStrength.cs" />
     <Compile Include="Conditions\CurrentRun.cs" />
     <Compile Include="ContinuousEffects\ModifyRezCost.cs" />
+    <Compile Include="GameManagement\CorporationGame.cs" />
     <Compile Include="Corporation\IRezableCard.cs" />
     <Compile Include="Corporation\IServerCard.cs" />
     <Compile Include="Corporation\Operation.cs" />
@@ -79,10 +86,13 @@
     <Compile Include="GameContextEventArgs.cs" />
     <Compile Include="Corporation\IceEventArgs.cs" />
     <Compile Include="Corporation\IceTypes.cs" />
+    <Compile Include="GameManagement\InMemory\InMemoryGameConnector.cs" />
     <Compile Include="IllegalActionException.cs" />
     <Compile Include="InstantEffects\ArrangeTopFiveCardsOfResearchAndDevelopment.cs" />
     <Compile Include="InstantEffects\EndTheRun.cs" />
     <Compile Include="InstantEffects\LoseClicks.cs" />
+    <Compile Include="GameManagement\HostedGame.cs" />
+    <Compile Include="GameManagement\ICorporationConnectorServerSide.cs" />
     <Compile Include="Selectors\IceProtectingServer.cs" />
     <Compile Include="Selectors\Selector.cs" />
     <Compile Include="Selectors\NextPieceOfIce.cs" />
