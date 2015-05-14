@@ -60,9 +60,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionEventArgs.cs" />
+    <Compile Include="CardDefinitions\CoreSet\CorpHaasBioroid.cs" />
+    <Compile Include="CardDefinitions\CoreSet\CorpNBN.cs" />
+    <Compile Include="CardDefinitions\CoreSet\CorpWeyland.cs" />
+    <Compile Include="CardDefinitions\CoreSet\RunnerAnarch.cs" />
+    <Compile Include="CardDefinitions\CoreSet\RunnerCriminal.cs" />
+    <Compile Include="CardDefinitions\CoreSet\RunnerShaper.cs" />
     <Compile Include="CardFactory.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="ActionBase.cs" />
+    <Compile Include="CardDefinitions\CoreSet\CorpJinteki.cs" />
+    <Compile Include="CardDefinitions\CoreSet\CorpNeutral.cs" />
+    <Compile Include="CardDefinitions\CoreSet\RunnerNeutral.cs" />
     <Compile Include="GameManagement\CorporationGameState.cs" />
     <Compile Include="GameManagement\CorporationGameStateEventArgs.cs" />
     <Compile Include="GameManagement\IClient.cs" />
@@ -120,6 +129,7 @@
     <Compile Include="Triggers\IceEncounterEnds.cs" />
     <Compile Include="Triggers\PostTrigger.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
