@@ -48,6 +48,10 @@
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
+    <Reference Include="Stateless, Version=2.4.0.1, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ThirdParty\Stateless.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
@@ -59,7 +63,11 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionEventArgs.cs" />
+    <Compile Include="Actions\ActionEventArgs.cs" />
+    <Compile Include="Actions\CorporationDrawsCard.cs" />
+    <Compile Include="Actions\MakeCardVisible.cs" />
+    <Compile Include="Actions\RunnerPasses.cs" />
+    <Compile Include="Actions\CorporationPasses.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpHaasBioroid.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpNBN.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpWeyland.cs" />
@@ -68,12 +76,16 @@
     <Compile Include="CardDefinitions\CoreSet\RunnerShaper.cs" />
     <Compile Include="CardFactory.cs" />
     <Compile Include="Card.cs" />
-    <Compile Include="ActionBase.cs" />
+    <Compile Include="Actions\ActionBase.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpJinteki.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpNeutral.cs" />
     <Compile Include="CardDefinitions\CoreSet\RunnerNeutral.cs" />
+    <Compile Include="GameFlow\PaidAbilityWindowOptions.cs" />
+    <Compile Include="GameFlow\State.cs" />
+    <Compile Include="GameFlow\Trigger.cs" />
     <Compile Include="GameManagement\CorporationGameState.cs" />
     <Compile Include="GameManagement\CorporationGameStateEventArgs.cs" />
+    <Compile Include="GameFlow\StateMachine.cs" />
     <Compile Include="GameManagement\IClient.cs" />
     <Compile Include="GameManagement\ICorporationConnectorClientSide.cs" />
     <Compile Include="Conditions\Always.cs" />
@@ -129,7 +141,10 @@
     <Compile Include="Triggers\IceEncounterEnds.cs" />
     <Compile Include="Triggers\PostTrigger.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ThirdParty\Stateless.dll" />
+    <Content Include="ThirdParty\Stateless.pdb" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

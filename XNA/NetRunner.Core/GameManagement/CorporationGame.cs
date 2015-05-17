@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NetRunner.Core.GameFlow;
+using NetRunner.Core.Actions;
 
 namespace NetRunner.Core.GameManagement
 {
@@ -12,7 +14,10 @@ namespace NetRunner.Core.GameManagement
     /// </summary>
     public class CorporationGame
     {
-        private ICorporationConnectorClientSide mConnector;
+        private ICorporationConnectorClientSide _Connector;
+        public GameContext Context { get; private set; }
+        public StateMachine StateMachine { get; private set; }
+        private Queue<ActionBase> _UnconfirmedActions = new Queue<ActionBase>();
 
         public CorporationGame(ICorporationConnectorClientSide connector)
         {
@@ -21,16 +26,31 @@ namespace NetRunner.Core.GameManagement
                 throw new ArgumentNullException("connector");
             }
 
-            mConnector = connector;
-            mConnector.ActionReceived += Connector_ActionReceived;
-            mConnector.GameStateReceived += Connector_GameStateReceived;
+            _Connector = connector;
+            _Connector.ActionReceived += Connector_ActionReceived;
+            _Connector.GameStateReceived += Connector_GameStateReceived;
             Resync();
         }
 
         private void Connector_ActionReceived(object sender, ActionEventArgs e)
         {
-            // Check action matches the expectation.
-            // Apply action.
+            if (_UnconfirmedActions.Count > 0)
+            {
+                ActionBase unconfirmedAction = _UnconfirmedActions.Peek();
+                if (unconfirmedAction.Equals(e.Action))
+                {
+                    _UnconfirmedActions.Dequeue();
+                }
+                else
+                {
+                    //Resync();
+                    //return;
+                }
+            }
+            else
+            {
+                ApplyAction(e.Action, false);
+            }
         }
 
         private void Connector_GameStateReceived(object sender, CorporationGameStateEventArgs e)
@@ -41,6 +61,13 @@ namespace NetRunner.Core.GameManagement
         private void Load(CorporationGameState corporationGameState)
         {
             // TODO: Load the game
+            
+            Context = new GameContext();
+
+            StateMachine = new StateMachine(
+                corporationGameState.State,
+                corporationGameState.OpponentWillHaveChanceToRespond,
+                corporationGameState.OpponentHasHadFirstChanceToRespond);
         }
 
         public void TakeAction(ActionBase action)
@@ -50,22 +77,33 @@ namespace NetRunner.Core.GameManagement
                 throw new ArgumentNullException("action");
             }
 
-            // TODO: Check that the action is legal.
-            //       If it's not, we probably need to call Resync().
+            ApplyAction(action, true);
+        }
 
-            // TODO: Apply the action locally.
-            //       We want to see an immediate effect rather than wait for the round-trip to the server.
+        private void ApplyAction(ActionBase action, bool sendToHostedGame)
+        {
+            // Ensure the action is valid to be taken.
+            if (!action.IsValid(Context, StateMachine))
+            {
+                // Resync();
+                throw new Exception("The action was not valid.");
+            }
 
-            // TODO: Set an expectation that the next action reported by the hosted game will be this action.
-            //       If the server tells us that our action was invalid, we probably need to call Resync();
-            
-            // Send the action to the hosted game via our connector.
-            mConnector.SendAction(action);
+            // We want to see an immediate effect rather than wait for the round-trip to the server.
+            action.Apply(Context, StateMachine);
+
+            if (sendToHostedGame)
+            {
+                _UnconfirmedActions.Enqueue(action);
+
+                // Send the action to the hosted game via our connector.
+                _Connector.SendAction(action);
+            }
         }
 
         public void Resync()
         {
-            mConnector.RequestGameState();
+            _Connector.RequestGameState();
         }
     }
 }

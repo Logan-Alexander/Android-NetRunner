@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetRunner.Core.Actions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,7 @@ namespace NetRunner.Core.GameManagement.InMemory
             }
 
             // Deliever any actions from the hosted game to the corporation.
-            List<ActionBase> actionsToDeliver = mActionsToDelieverToCorporation;
+            List<ActionBase> actionsToDeliver = new List<ActionBase>(mActionsToDelieverToCorporation);
             mActionsToDelieverToCorporation.Clear();
             foreach (ActionBase action in actionsToDeliver)
             {
