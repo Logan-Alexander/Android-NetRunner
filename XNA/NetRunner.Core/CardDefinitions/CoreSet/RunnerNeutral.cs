@@ -17,7 +17,7 @@ namespace NetRunner.Core
         protected EventCard CreateSureGamble()
         {
             EventCard card = new EventCard(
-                    0,
+                    50,
                     "Sure Gamble",
                     0,
                     RunnerFaction.None,
