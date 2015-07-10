@@ -12,22 +12,91 @@ namespace NetRunner.Core.Actions
     [Serializable]
     public abstract class ActionBase
     {
-        public abstract bool IsValid(GameContext context, StateMachine stateMachine);
+        public Guid ID { get; protected set; }
+        public bool DeferExecution { get; protected set; }
 
-        public abstract void Apply(GameContext context, StateMachine stateMachine);
-
-        protected abstract bool Equals(ActionBase otherAction);
-
-        public override bool Equals(object obj)
+        public ActionBase()
         {
-            if (obj is ActionBase)
-            {
-                return Equals((ActionBase)obj);
-            }
-            else
-            {
-                return false;
-            }
+            ID = Guid.NewGuid();
+            DeferExecution = false;
         }
+
+        public bool IsValidForCorporation(GameContext context, Flow flow)
+        {
+            return IsContextValidForCorporation(context) && IsFlowValid(flow);
+        }
+
+        public bool IsValidForRunner(GameContext context, Flow flow)
+        {
+            return IsContextValidForRunner(context) && IsFlowValid(flow);
+        }
+
+        public bool IsValidForServer(GameContext context, Flow flow)
+        {
+            return IsContextValidForServer(context) && IsFlowValid(flow);
+        }
+
+        protected virtual bool IsContextValidForCorporation(GameContext context)
+        {
+            return true;
+        }
+
+        protected virtual bool IsContextValidForRunner(GameContext context)
+        {
+            return true;
+        }
+
+        protected virtual bool IsContextValidForServer(GameContext context)
+        {
+            return true;
+        }
+
+        protected virtual bool IsFlowValid(Flow flow)
+        {
+            return true;
+        }
+
+        public virtual void ApplyToCorporation(GameContext context, Flow flow)
+        {
+            ApplyToAll(context, flow);
+        }
+
+        public virtual void ApplyToRunner(GameContext context, Flow flow)
+        {
+            ApplyToAll(context, flow);
+        }
+
+        public virtual void ApplyToServer(GameContext context, Flow flow)
+        {
+            ApplyToAll(context, flow);
+        }
+
+        protected virtual void ApplyToAll(GameContext context, Flow flow)
+        {
+
+        }
+
+        public virtual void AddInformationForCorporation()
+        {
+        }
+
+        public virtual void AddInformationForRunner()
+        {
+        }
+
+        public bool HasSameID(ActionBase otherAction)
+        {
+            return ID == otherAction.ID;
+        }
+
+        public virtual ActionBase Clone()
+        {
+            ActionBase clone = CreateInstanceForClone();
+            clone.ID = this.ID;
+            clone.DeferExecution = this.DeferExecution;
+            return clone;
+        }
+
+        protected abstract ActionBase CreateInstanceForClone();
     }
 }

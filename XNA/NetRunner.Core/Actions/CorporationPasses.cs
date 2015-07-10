@@ -8,19 +8,19 @@ namespace NetRunner.Core.Actions
 {
     public class CorporationPasses : ActionBase
     {
-        public override bool IsValid(GameContext context, GameFlow.StateMachine stateMachine)
+        protected override bool IsFlowValid(Flow flow)
         {
-            return stateMachine.CanFire(Trigger.CorporationPasses);
+            return flow.CanFire(Trigger.CorporationPasses);
         }
 
-        public override void Apply(GameContext context, GameFlow.StateMachine stateMachine)
+        protected override void ApplyToAll(GameContext context, Flow flow)
         {
-            stateMachine.Fire(Trigger.CorporationPasses);
+            flow.Fire(Trigger.CorporationPasses);
         }
 
-        protected override bool Equals(ActionBase otherAction)
+        protected override ActionBase CreateInstanceForClone()
         {
-            return (otherAction is CorporationPasses);
+            return new CorporationPasses();
         }
     }
 }

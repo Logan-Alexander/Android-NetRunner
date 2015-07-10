@@ -10,10 +10,11 @@ namespace NetRunner.Core.GameManagement
     public class HostedGame
     {
         public GameContext Context { get; private set; }
-        public StateMachine StateMachine { get; private set; }
+        public Flow Flow { get; private set; }
         private List<ICorporationConnectorServerSide> mCorporationConnectors;
+        private List<IRunnerConnectorServerSide> mRunnerConnectors;
 
-        public HostedGame(GameContext gameContext, StateMachine stateMachine)
+        public HostedGame(GameContext gameContext, Flow flow)
         {
             if (gameContext == null)
             {
@@ -21,94 +22,130 @@ namespace NetRunner.Core.GameManagement
             }
 
             Context = gameContext;
-            StateMachine = stateMachine;
+            Flow = flow;
             mCorporationConnectors = new List<ICorporationConnectorServerSide>();
+            mRunnerConnectors = new List<IRunnerConnectorServerSide>();
         }
 
-        public void AddCorporationConnector(ICorporationConnectorServerSide connector)
+        public void AddCorporationConnector(ICorporationConnectorServerSide corporationConnector)
         {
-            if (connector == null)
+            if (corporationConnector == null)
             {
-                throw new ArgumentNullException("connector");
+                throw new ArgumentNullException("corporationConnector");
             }
 
-            mCorporationConnectors.Add(connector);
-            connector.GameStateRequested += Connector_GameStateRequested;
-            connector.ActionReceived += Connector_ActionReceived;
+            mCorporationConnectors.Add(corporationConnector);
+            corporationConnector.GameStateRequested += CorporationConnector_GameStateRequested;
+            corporationConnector.ActionReceived += CorporationConnector_ActionReceived;
         }
 
-        private void Connector_GameStateRequested(object sender, EventArgs e)
+        public void AddRunnerConnector(IRunnerConnectorServerSide runnerConnector)
+        {
+            if (runnerConnector == null)
+            {
+                throw new ArgumentNullException("runnerConnector");
+            }
+
+            mRunnerConnectors.Add(runnerConnector);
+            runnerConnector.GameStateRequested += RunnerConnector_GameStateRequested;
+            runnerConnector.ActionReceived += RunnerConnector_ActionReceived;
+        }
+
+        private void CorporationConnector_GameStateRequested(object sender, EventArgs e)
         {
             ICorporationConnectorServerSide connector = (ICorporationConnectorServerSide)sender;
 
-            SendGameState(connector);
+            SendGameStateToCorporation(connector);
         }
 
-        private void SendGameState(ICorporationConnectorServerSide connector)
+        private void RunnerConnector_GameStateRequested(object sender, EventArgs e)
         {
-            CorporationGameState gameState = new CorporationGameState(Context, StateMachine);
+            IRunnerConnectorServerSide connector = (IRunnerConnectorServerSide)sender;
+
+            SendGameStateToRunner(connector);
+        }
+
+        private void SendGameStateToCorporation(ICorporationConnectorServerSide connector)
+        {
+            CorporationGameState gameState = new CorporationGameState(Context, Flow);
 
             connector.SendGameState(gameState);
         }
 
-        private void Connector_ActionReceived(object sender, ActionEventArgs e)
+        private void SendGameStateToRunner(IRunnerConnectorServerSide connector)
+        {
+            RunnerGameState gameState = new RunnerGameState(Context, Flow);
+
+            connector.SendGameState(gameState);
+        }
+
+        private void CorporationConnector_ActionReceived(object sender, ActionEventArgs e)
         {
             ActionBase action = e.Action;
             
             // Ensure the action is valid to be taken.
-            if (!action.IsValid(Context, StateMachine))
+            if (!action.IsValidForServer(Context, Flow))
             {
                 // Tell the corporation client to resync.
                 ICorporationConnectorServerSide connector = (ICorporationConnectorServerSide)sender;
-                SendGameState(connector);
+                SendGameStateToCorporation(connector);
                 return;
             }
-
-            action.Apply(Context, StateMachine);
 
             // Replay the action to all connectors.
             // This will allow the corporation to confirm that action was received and
             // applied.
+            ActionBase responseForCorporation = action.Clone();
+            responseForCorporation.AddInformationForCorporation();
             foreach (var corporationConnector in mCorporationConnectors)
             {
-                corporationConnector.SendAction(action);
+                corporationConnector.SendAction(responseForCorporation);
             }
             
-            // TODO: Send the action to all runner connectors.
-
-            // Check if the hosted game itself needs to do anything.
-            switch (StateMachine.State)
+            // Send the action to all runner connectors.
+            ActionBase responseForRunner = action.Clone();
+            responseForRunner.AddInformationForRunner();
+            foreach (var runnerConnector in mRunnerConnectors)
             {
-                case State.CorporationDrawPhaseDrawingCard:
-                    DrawCorporationCard();
-                    break;
+                runnerConnector.SendAction(responseForRunner);
             }
+
+            action.ApplyToServer(Context, Flow);
         }
 
-        private void DrawCorporationCard()
+        private void RunnerConnector_ActionReceived(object sender, ActionEventArgs e)
         {
-            // TODO: Handle the runner's victory condition.
-            //if (Context.ResearchAndDevelopment.IsEmpty)
-            //{
-            //    Runner wins.
-            //}
+            ActionBase action = e.Action;
 
-            CorporationDrawsCard corporationDrawsCard = new CorporationDrawsCard();
-            corporationDrawsCard.Apply(Context, StateMachine);
+            // Ensure the action is valid to be taken.
+            if (!action.IsValidForServer(Context, Flow))
+            {
+                // Tell the runner client to resync.
+                IRunnerConnectorServerSide connector = (IRunnerConnectorServerSide)sender;
+                SendGameStateToRunner(connector);
+                return;
+            }
 
-            // TODO: Tell the corporation about it (action + card name)
-            MakeCardVisible makeCardVisible = new MakeCardVisible(null, null);
+            // Replay the action to all connectors.
+            // This will allow the runner to confirm that action was received and
+            // applied.
+            ActionBase responseForRunner = action.Clone();
+            responseForRunner.AddInformationForRunner();
+            foreach (var runnerConnector in mRunnerConnectors)
+            {
+                runnerConnector.SendAction(responseForRunner);
+            }
+
+            // Send the action to all runner connectors.
+            ActionBase responseForCorporation = action.Clone();
+            responseForCorporation.AddInformationForCorporation();
             foreach (var corporationConnector in mCorporationConnectors)
             {
-                corporationConnector.SendAction(makeCardVisible);
-                corporationConnector.SendAction(corporationDrawsCard);
+                corporationConnector.SendAction(responseForCorporation);
             }
 
-            // TODO: Tell the runner about it (action only)
-            //foreach (var runnerConnector in mRunnerConnectors)
-            //{
-            //    runnerConnector.SendAction(corporationDrawsCard);
-            //}
+            action.ApplyToServer(Context, Flow);
         }
+
     }
 }

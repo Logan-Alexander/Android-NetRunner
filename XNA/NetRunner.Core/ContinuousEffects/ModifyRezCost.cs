@@ -11,7 +11,6 @@ namespace NetRunner.Core.ContinuousEffects
     public class ModifyRezCost : ContinuousEffect
     {
         private ISelector<IRezableCard> mRezableCardsSelector;
-        private PieceOfIce mIce;
         private int mAmount;
 
         public ModifyRezCost(ISelector<IRezableCard> rezableCardsSelector, int amount)

@@ -64,5 +64,18 @@ namespace NetRunner.Core
         public virtual void RemoveFromHeap(RunnerCard card)
         {
         }
+
+        public bool CardExists(object cardIdentifier)
+        {
+            // TODO
+            return true;
+        }
+
+        public void IdentifityCard(object cardIdentifier, string cardName)
+        {
+            //TODO: Attach the relevant behaviour to the identified card.
+            //Card card = CardIdentifier.FindCard(context);
+            //card.Behaviour = CardBehaviourFactory.Create(CardName);
+        }
     }
 }

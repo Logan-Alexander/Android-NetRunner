@@ -8,11 +8,11 @@ using NetRunner.Core.Actions;
 namespace NetRunner.Core.GameManagement
 {
     /// <summary>
-    /// A corporation game is a game seen from the Corporation's point of view.
-    /// I.e. The Corporation's cards will be visible, but the Runner's cards will not.
-    /// Any action that is taken by the corporation will be sent to the hosted game.
+    /// A runner game is a game seen from the Runner's point of view.
+    /// I.e. The Runner's cards will be visible, but the Runner's cards will not.
+    /// Any action that is taken by the runner will be sent to the hosted game.
     /// </summary>
-    public class CorporationGame
+    public class RunnerGame
     {
         public event EventHandler GameOutOfSync;
         protected void OnGameOutOfSync(EventArgs e)
@@ -24,14 +24,14 @@ namespace NetRunner.Core.GameManagement
             }
         }
 
-        private ICorporationConnectorClientSide _Connector;
+        private IRunnerConnectorClientSide _Connector;
         public GameContext Context { get; private set; }
         public Flow Flow { get; private set; }
         public bool WaitingForDeferedExection { get; set; }
 
         private Queue<ActionBase> _UnconfirmedActions = new Queue<ActionBase>();
 
-        public CorporationGame(ICorporationConnectorClientSide connector)
+        public RunnerGame(IRunnerConnectorClientSide connector)
         {
             if (connector == null)
             {
@@ -71,17 +71,17 @@ namespace NetRunner.Core.GameManagement
             }
         }
 
-        private void Connector_GameStateReceived(object sender, CorporationGameStateEventArgs e)
+        private void Connector_GameStateReceived(object sender, RunnerGameStateEventArgs e)
         {
-            Load(e.CorporationGameState);
+            Load(e.RunnerGameState);
         }
 
-        private void Load(CorporationGameState corporationGameState)
+        private void Load(RunnerGameState runnerGameState)
         {
             // TODO: Load the game
-            
+
             Context = new GameContext();
-            Flow = new Flow(corporationGameState.SerlaizedState);
+            Flow = new Flow(runnerGameState.SerlaizedState);
         }
 
         public void TakeAction(ActionBase action)
@@ -97,7 +97,7 @@ namespace NetRunner.Core.GameManagement
         private void ApplyAction(ActionBase action, bool sendToHostedGame)
         {
             // Ensure the action is valid to be taken.
-            if (!action.IsValidForCorporation(Context, Flow))
+            if (!action.IsValidForRunner(Context, Flow))
             {
                 OnGameOutOfSync(new EventArgs());
                 Resync();
@@ -115,7 +115,7 @@ namespace NetRunner.Core.GameManagement
             // We want to see an immediate effect rather than wait for the round-trip to the server.
             if (!action.DeferExecution || !sendToHostedGame)
             {
-                action.ApplyToCorporation(Context, Flow);
+                action.ApplyToRunner(Context, Flow);
                 WaitingForDeferedExection = false;
             }
             else

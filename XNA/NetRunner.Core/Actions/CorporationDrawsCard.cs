@@ -8,20 +8,49 @@ namespace NetRunner.Core.Actions
 {
     public class CorporationDrawsCard : ActionBase
     {
-        public override bool IsValid(GameContext context, GameFlow.StateMachine stateMachine)
+        /// <summary>
+        /// The name of the card that was drawn.
+        /// </summary>
+        public string CardName { get; private set; }
+
+        public CorporationDrawsCard()
         {
-            return stateMachine.CanFire(Trigger.CorporationCardDrawn);
+            DeferExecution = true;
         }
 
-        public override void Apply(GameContext context, GameFlow.StateMachine stateMachine)
+        protected override bool IsFlowValid(Flow flow)
+        {
+            return flow.CanFire(Trigger.CorporationCardDrawn);
+        }
+
+        public override void ApplyToCorporation(GameContext context, Flow flow)
+        {
+            // TODO: Identify the card: context.IdentifityCard(TopCardOfR&D, CardName);
+            base.ApplyToCorporation(context, flow);
+        }
+
+        protected override void ApplyToAll(GameContext context, Flow flow)
         {
             // TODO: Move the top card of R&D to HQ.
-            stateMachine.Fire(Trigger.CorporationCardDrawn);
+            flow.Fire(Trigger.CorporationCardDrawn);
         }
 
-        protected override bool Equals(ActionBase otherAction)
+        public override void AddInformationForCorporation()
         {
-            return (otherAction is CorporationDrawsCard);
+            // TODO: Set this to the top card of R&D.
+            CardName = "TODO"; 
+        }
+
+        protected override ActionBase CreateInstanceForClone()
+        {
+            return new CorporationDrawsCard();
+        }
+
+        public override ActionBase Clone()
+        {
+            CorporationDrawsCard clone = (CorporationDrawsCard)base.Clone();
+            clone.CardName = this.CardName;
+            return clone;
         }
     }
 }

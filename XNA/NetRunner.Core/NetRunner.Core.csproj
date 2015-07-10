@@ -65,7 +65,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionEventArgs.cs" />
     <Compile Include="Actions\CorporationDrawsCard.cs" />
-    <Compile Include="Actions\MakeCardVisible.cs" />
+    <Compile Include="Actions\CorporationScoresAgenda.cs" />
     <Compile Include="Actions\RunnerPasses.cs" />
     <Compile Include="Actions\CorporationPasses.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpHaasBioroid.cs" />
@@ -80,12 +80,15 @@
     <Compile Include="CardDefinitions\CoreSet\CorpJinteki.cs" />
     <Compile Include="CardDefinitions\CoreSet\CorpNeutral.cs" />
     <Compile Include="CardDefinitions\CoreSet\RunnerNeutral.cs" />
-    <Compile Include="GameFlow\PaidAbilityWindowOptions.cs" />
-    <Compile Include="GameFlow\State.cs" />
+    <Compile Include="GameFlow\MainStateMachine.cs" />
+    <Compile Include="GameFlow\StateMachineBase.cs" />
+    <Compile Include="GameFlow\PaidAbilityWindowStateMachine.cs" />
+    <Compile Include="GameFlow\Flow.cs" />
     <Compile Include="GameFlow\Trigger.cs" />
+    <Compile Include="GameFlow\TurnOrderStateMachine.cs" />
+    <Compile Include="GameFlow\PaidAbilityWindowOptions.cs" />
     <Compile Include="GameManagement\CorporationGameState.cs" />
     <Compile Include="GameManagement\CorporationGameStateEventArgs.cs" />
-    <Compile Include="GameFlow\StateMachine.cs" />
     <Compile Include="GameManagement\IClient.cs" />
     <Compile Include="GameManagement\ICorporationConnectorClientSide.cs" />
     <Compile Include="Conditions\Always.cs" />
@@ -108,6 +111,11 @@
     <Compile Include="Corporation\IceEventArgs.cs" />
     <Compile Include="Corporation\IceTypes.cs" />
     <Compile Include="GameManagement\InMemory\InMemoryGameConnector.cs" />
+    <Compile Include="GameManagement\IRunnerConnectorClientSide.cs" />
+    <Compile Include="GameManagement\IRunnerConnectorServerSide.cs" />
+    <Compile Include="GameManagement\RunnerGame.cs" />
+    <Compile Include="GameManagement\RunnerGameState.cs" />
+    <Compile Include="GameManagement\RunnerGameStateEventArgs.cs" />
     <Compile Include="IllegalActionException.cs" />
     <Compile Include="InstantEffects\ArrangeTopFiveCardsOfResearchAndDevelopment.cs" />
     <Compile Include="InstantEffects\EndTheRun.cs" />

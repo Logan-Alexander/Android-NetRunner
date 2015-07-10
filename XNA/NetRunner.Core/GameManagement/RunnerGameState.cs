@@ -8,14 +8,14 @@ namespace NetRunner.Core.GameManagement
 {
     /// <summary>
     /// Provides a complete and transportable description of the game from the
-    /// Corporation's point of view.
+    /// Runner's point of view.
     /// </summary>
     [Serializable]
-    public class CorporationGameState
+    public class RunnerGameState
     {
         public object SerlaizedState { get; private set; }
 
-        public CorporationGameState(GameContext gameContext, Flow flow)
+        public RunnerGameState(GameContext gameContext, Flow flow)
         {
             // TODO: Create state from context.
             SerlaizedState = flow.Serialize();

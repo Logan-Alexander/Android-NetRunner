@@ -24,8 +24,8 @@ namespace NetRunner.UI.Console
 
             // Create the GameContext. This will hold all information about the game.
             GameContext gameContext = new GameContext();
-            StateMachine stateMachine = new StateMachine();
-            stateMachine.Fire(Trigger.GameStarts);
+            Flow stack = new Flow();
+            stack.Fire(Trigger.GameStarts);
 
             // Create a HostedGame.
             // This will allow information about the game to be broadcast to all players.
@@ -33,7 +33,7 @@ namespace NetRunner.UI.Console
             // For example, when the Corporation draws a card, the Corporation will be told
             // which card was moved from R&D to Headquarters. The Runner will only be told
             // that a card was moved.
-            HostedGame hostedGame = new HostedGame(gameContext, stateMachine);
+            HostedGame hostedGame = new HostedGame(gameContext, stack);
 
             // An "in-memory" game connector allows information to flow directly from clients
             // to the hosted game. In a local game, this will be sufficient.
@@ -44,8 +44,13 @@ namespace NetRunner.UI.Console
             // Tell the hosted game about our connector so that it handles our requests and
             // broadcasts information to us.
             hostedGame.AddCorporationConnector(inMemoryConnector);
+            hostedGame.AddRunnerConnector(inMemoryConnector);
 
-            // -------- THIS PART HAPPENS ON EACH PLAYER'S COMPUTER -------- 
+            // -------- THIS PART HAPPENS ON THE RUNNER PLAYER'S COMPUTER -------- 
+
+            RunnerGame runnerGame = new RunnerGame(inMemoryConnector);
+
+            // -------- THIS PART HAPPENS ON THE CORPORATION PLAYER'S COMPUTER -------- 
 
             // In an internet game, we would create an instance of a client-side connector here.
             // However, as this game is in-memory, we can use the same connector which implements
@@ -68,20 +73,23 @@ namespace NetRunner.UI.Console
             // to the hosted game for a copy of the game state, which it then loads.
 
             // OK - So here we go with some sample actions:
+            corporationGame.TakeAction(new CorporationScoresAgenda(1234));
             corporationGame.TakeAction(new CorporationPasses());
             inMemoryConnector.Update();
 
-            // This action should originate from the runner's game, but it's a hack for now.
-            corporationGame.TakeAction(new RunnerPasses());
+            runnerGame.TakeAction(new RunnerPasses());
             inMemoryConnector.Update();
 
-            // The hosted game should now respond by sending the corporation game 2 actions:
-            // - Make Card Visible
-            // - Corporation Draws Card
+            // We need to call update here twice as runner actions are processed after corp actions.
+            // When used in a real game loop, this wont be an issue (aside from a 1 frame delay).
+            inMemoryConnector.Update();
+
+            corporationGame.TakeAction(new CorporationDrawsCard());
+            inMemoryConnector.Update();
 
             // This concludes the draw phase so we should now be in the action phase.
 
-            System.Console.WriteLine(corporationGame.StateMachine.State);
+            System.Console.WriteLine(corporationGame.Flow);
 
             System.Console.ReadKey();
         }
