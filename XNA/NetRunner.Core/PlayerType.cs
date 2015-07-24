@@ -7,6 +7,7 @@ namespace NetRunner.Core
 {
     public enum PlayerType
     {
+        None,
         Runner,
         Corporation
     }

@@ -5,13 +5,16 @@ using System.Text;
 
 namespace NetRunner.Core.Runner
 {
-    public class EventCard : RunnerCard
+    public class EventCardBehaviour : RunnerCardBehaviour
     {
+        public int Cost { get; private set; }
+
         private List<Effect> mEffects;
 
-        public EventCard(int id, string title, int influence, RunnerFaction faction, int cost)
-            : base(id, title, influence, faction, cost)
+        public EventCardBehaviour(Card card, int influence, RunnerFaction faction, int cost)
+            : base(card, influence, faction)
         {
+            Cost = cost;
             mEffects = new List<Effect>();
         }
 
@@ -32,8 +35,8 @@ namespace NetRunner.Core.Runner
 
             context.RunnerCredits -= Cost;
             
-            context.RemoveFromGrip(this);
-            context.AddToHeap(this);
+            context.Grip.Remove(Card);
+            context.Heap.Add(Card);
 
             foreach (Effect effect in mEffects)
             {

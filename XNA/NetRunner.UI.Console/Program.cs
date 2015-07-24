@@ -1,5 +1,6 @@
 ﻿using NetRunner.Core;
 using NetRunner.Core.Actions;
+using NetRunner.Core.CardIdentifiers;
 using NetRunner.Core.ContinuousEffects;
 using NetRunner.Core.Corporation;
 using NetRunner.Core.GameFlow;
@@ -18,12 +19,23 @@ namespace NetRunner.UI.Console
     {
         static void Main(string[] args)
         {
-            //DoStuff();
+            GameSetup setup = new GameSetup();
+            setup.CorporationFaction = Core.Corporation.CorporationFaction.Jinteki;
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
 
             // -------- IN AN INTERNET GAME, THIS PART WOULD HAPPEN ON THE WEB SERVER -------- 
 
             // Create the GameContext. This will hold all information about the game.
-            GameContext gameContext = new GameContext();
+            GameContext gameContext = new GameContext(setup);
             Flow stack = new Flow();
             stack.Fire(Trigger.GameStarts);
 
@@ -73,7 +85,8 @@ namespace NetRunner.UI.Console
             // to the hosted game for a copy of the game state, which it then loads.
 
             // OK - So here we go with some sample actions:
-            corporationGame.TakeAction(new CorporationScoresAgenda(1234));
+            AssetOrAgendaIdentifier cardIdentifier = new AssetOrAgendaIdentifier(0);
+            corporationGame.TakeAction(new CorporationScoresAgenda(cardIdentifier));
             corporationGame.TakeAction(new CorporationPasses());
             inMemoryConnector.Update();
 
@@ -96,16 +109,30 @@ namespace NetRunner.UI.Console
 
         static void DoStuff()
         {
-            CardFactory cardFactory = new CardFactory();
+            GameSetup setup = new GameSetup();
+            setup.CorporationFaction = Core.Corporation.CorporationFaction.Jinteki;
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
 
-            GameContext context = new GameContext();
+            GameContext context = new GameContext(setup);
             context.CurrentRun = new Run();
 
             // Set up a piece of "Chum" Ice.
-            PieceOfIce ice = (PieceOfIce)cardFactory.Create("Chum");
-            context.OnIceEncounterStarted(new IceEventArgs(context, ice));
+            Card card1 = new Card(PlayerType.Corporation);
+            card1.IdentifyCard("Chum");
+            PieceOfIceCardBehaviour ice1 = (PieceOfIceCardBehaviour)card1.Behaviour;
 
-            foreach (Subroutine subroutine in ice.SubRoutines)
+            context.OnIceEncounterStarted(new IceEventArgs(context, ice1));
+
+            foreach (Subroutine subroutine in ice1.SubRoutines)
             {
                 if (!subroutine.IsBroken)
                 {
@@ -113,10 +140,12 @@ namespace NetRunner.UI.Console
                 }
             }
 
-            context.OnIceEncounterEnded(new IceEventArgs(context, ice));
+            context.OnIceEncounterEnded(new IceEventArgs(context, ice1));
 
             // Set up another piece of ice (in the same run) to be affected by the Chum.
-            PieceOfIce ice2 = (PieceOfIce)cardFactory.Create("Wall of Thorns");
+            Card card2 = new Card(PlayerType.Corporation);
+            card2.IdentifyCard("Wall of Thorns");
+            PieceOfIceCardBehaviour ice2 = (PieceOfIceCardBehaviour)card2.Behaviour;
             context.OnIceEncounterStarted(new IceEventArgs(context, ice2));
 
             // The code to check for any modifications to the ice will look something like this...

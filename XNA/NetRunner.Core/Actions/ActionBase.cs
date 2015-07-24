@@ -9,7 +9,6 @@ namespace NetRunner.Core.Actions
     /// <summary>
     /// Defines an action that can be taken by the player.
     /// </summary>
-    [Serializable]
     public abstract class ActionBase
     {
         public Guid ID { get; protected set; }
@@ -76,11 +75,11 @@ namespace NetRunner.Core.Actions
 
         }
 
-        public virtual void AddInformationForCorporation()
+        public virtual void AddInformationForCorporation(GameContext context, Flow flow)
         {
         }
 
-        public virtual void AddInformationForRunner()
+        public virtual void AddInformationForRunner(GameContext context, Flow flow)
         {
         }
 

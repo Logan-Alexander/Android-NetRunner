@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NetRunner.Core.GameFlow;
 using NetRunner.Core.Actions;
+using System.Diagnostics;
 
 namespace NetRunner.Core.GameManagement
 {
@@ -78,10 +79,10 @@ namespace NetRunner.Core.GameManagement
 
         private void Load(CorporationGameState corporationGameState)
         {
-            // TODO: Load the game
-            
-            Context = new GameContext();
-            Flow = new Flow(corporationGameState.SerlaizedState);
+            GameContextSerializer gameContextSerializer = new GameContextSerializer();
+            Context = gameContextSerializer.Deserialize(corporationGameState.SerializedGameContext);
+
+            Flow = new Flow(corporationGameState.SerializedFlow);
         }
 
         public void TakeAction(ActionBase action)

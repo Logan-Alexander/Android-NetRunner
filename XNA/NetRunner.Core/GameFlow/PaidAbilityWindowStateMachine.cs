@@ -6,6 +6,13 @@ using System.Text;
 
 namespace NetRunner.Core.GameFlow
 {
+    /// <summary>
+    /// At many points in the turn order, the players have the opportunity to use paid abiliites,
+    /// rez cards or score agendas. Starting with the current player, this process is a
+    /// "parliament" where every set of actions allows the opponent to proivde counter-actions.
+    /// The parliament ends when both players have had the opportunity to act and have
+    /// consecutively passed.
+    /// </summary>
     public class PaidAbilityWindowStateMachine : StateMachineBase
     {
         public enum StateName

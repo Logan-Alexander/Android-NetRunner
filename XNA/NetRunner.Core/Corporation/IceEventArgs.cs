@@ -8,9 +8,9 @@ namespace NetRunner.Core.Corporation
     [Serializable]
     public class IceEventArgs : GameContextEventArgs
     {
-        public PieceOfIce Ice { get; private set; }
+        public PieceOfIceCardBehaviour Ice { get; private set; }
 
-        public IceEventArgs(GameContext context, PieceOfIce ice)
+        public IceEventArgs(GameContext context, PieceOfIceCardBehaviour ice)
             : base(context)
         {
             if (ice == null)

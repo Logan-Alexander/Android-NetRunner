@@ -5,11 +5,11 @@ using System.Text;
 
 namespace NetRunner.Core.Selectors
 {
-    public class ThisCard : ISelector<Card>
+    public class ThisCard : ISelector<CardBehaviour>
     {
-        public Card Card { get; private set; }
+        public CardBehaviour Card { get; private set; }
 
-        public ThisCard(Card card)
+        public ThisCard(CardBehaviour card)
         {
             Card = card;
         }
@@ -23,7 +23,7 @@ namespace NetRunner.Core.Selectors
             get { return true; }
         }
 
-        public IEnumerable<Card> Items
+        public IEnumerable<CardBehaviour> Items
         {
             get { yield return Card; }
         }

@@ -12,6 +12,7 @@ using NetRunner.UI.Xna.Components;
 using GrahamThomson.Xna.Common;
 using NetRunner.Core.Actions;
 using System.Diagnostics;
+using NetRunner.Core.CardIdentifiers;
 
 namespace NetRunner.UI.Xna
 {
@@ -22,6 +23,7 @@ namespace NetRunner.UI.Xna
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont font1;
 
         private ConsoleUI _Console;
         private KeyboardManager _KeyboardManager;
@@ -60,6 +62,7 @@ namespace NetRunner.UI.Xna
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font1 = Content.Load<SpriteFont>("Fonts/SpriteFont1");
 
             // TODO: use this.Content to load your game content here
         }
@@ -106,7 +109,8 @@ namespace NetRunner.UI.Xna
             if (_KeyboardManager.IsKeyPressed(Keys.D4, true))
             {
                 Debug.WriteLine("Corporation scores agenda.");
-                _LocalGame.TakeCorporationAction(new CorporationScoresAgenda(1234));
+                AssetOrAgendaIdentifier cardIdentifier = new AssetOrAgendaIdentifier(0);
+                _LocalGame.TakeCorporationAction(new CorporationScoresAgenda(cardIdentifier));
             }
 
             base.Update(gameTime);
@@ -121,6 +125,19 @@ namespace NetRunner.UI.Xna
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+
+            int bottom = GraphicsDevice.Viewport.TitleSafeArea.Bottom;
+
+            string state = _LocalGame.CorporationGame.Flow.ToString();
+            spriteBatch.DrawString(font1, state, new Vector2(0, bottom - 32), Color.White);
+
+            int corpHandCount = _LocalGame.CorporationGame.Context.HeadQuarters.Hand.Count;
+            string corpInfo = string.Format("The corporation has {0} card(s) in their hand.", corpHandCount);
+            spriteBatch.DrawString(font1, corpInfo, new Vector2(0, bottom - 16), Color.White);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

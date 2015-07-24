@@ -6,14 +6,14 @@ using System.Text;
 
 namespace NetRunner.Core.Corporation
 {
-    public class Operation : CorporationCard
+    public abstract class OperationCardBehaviour : CorporationCardBehaviour
     {
         public int Cost { get; private set; }
         public List<Condition> PlayConditions { get; private set; }
         public List<Effect> Effects { get; private set; }
 
-        public Operation(int id, string title, int influence, CorporationFaction faction, int cost)
-            : base(id, title, influence, faction)
+        public OperationCardBehaviour(Card card, int influence, CorporationFaction faction, int cost)
+            : base(card, influence, faction)
         {
             Cost = cost;
             PlayConditions = new List<Condition>();

@@ -78,10 +78,10 @@ namespace NetRunner.Core.GameManagement
 
         private void Load(RunnerGameState runnerGameState)
         {
-            // TODO: Load the game
+            GameContextSerializer gameContextSerializer = new GameContextSerializer();
+            Context = gameContextSerializer.Deserialize(runnerGameState.SerializedGameContext);
 
-            Context = new GameContext();
-            Flow = new Flow(runnerGameState.SerlaizedState);
+            Flow = new Flow(runnerGameState.SerializedFlow);
         }
 
         public void TakeAction(ActionBase action)

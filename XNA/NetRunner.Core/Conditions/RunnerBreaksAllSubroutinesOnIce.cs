@@ -9,9 +9,9 @@ namespace NetRunner.Core.Conditions
 {
     public class RunnerBreaksAllSubroutinesOnIce : Condition
     {
-        private ISelector<PieceOfIce> mIceSelector;
+        private ISelector<PieceOfIceCardBehaviour> mIceSelector;
 
-        public RunnerBreaksAllSubroutinesOnIce(ISelector<PieceOfIce> iceSelector)
+        public RunnerBreaksAllSubroutinesOnIce(ISelector<PieceOfIceCardBehaviour> iceSelector)
         {
             mIceSelector = iceSelector;
         }

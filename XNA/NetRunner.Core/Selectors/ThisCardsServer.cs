@@ -8,11 +8,11 @@ namespace NetRunner.Core.Selectors
 {
     public class ThisCardsServer : ISelector<Server>
     {
-        public IServerCard ServerCard { get; private set; }
+        public Card Card { get; private set; }
 
-        public ThisCardsServer(IServerCard serverCard)
+        public ThisCardsServer(Card card)
         {
-            ServerCard = serverCard;
+            Card = card;
         }
 
         public void Resolve(GameContext context)
@@ -21,7 +21,11 @@ namespace NetRunner.Core.Selectors
 
         public bool IsResolved
         {
-            get { return ServerCard.Server != null; }
+            get
+            {
+                IServerCard serverCard = Card.Behaviour as IServerCard;
+                return serverCard != null && serverCard.Server != null;
+            }
         }
 
         public IEnumerable<Server> Items
@@ -30,7 +34,8 @@ namespace NetRunner.Core.Selectors
             {
                 if (IsResolved)
                 {
-                    yield return ServerCard.Server;
+                    IServerCard serverCard = (IServerCard)Card.Behaviour;
+                    yield return serverCard.Server;
                 }
             }
         }

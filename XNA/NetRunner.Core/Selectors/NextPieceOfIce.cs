@@ -9,9 +9,9 @@ namespace NetRunner.Core.Selectors
     /// <summary>
     /// Identifies the next piece of ice encountered by the Runner.
     /// </summary>
-    public class NextPieceOfIce : ISelector<PieceOfIce>
+    public class NextPieceOfIce : ISelector<PieceOfIceCardBehaviour>
     {
-        private PieceOfIce mNextPieceOfIce = null;
+        private PieceOfIceCardBehaviour mNextPieceOfIce = null;
 
         public void Resolve(GameContext context)
         {
@@ -31,7 +31,7 @@ namespace NetRunner.Core.Selectors
             get { return mNextPieceOfIce != null; }
         }
 
-        public IEnumerable<PieceOfIce> Items
+        public IEnumerable<PieceOfIceCardBehaviour> Items
         {
             get
             {

@@ -5,6 +5,10 @@ using System.Text;
 
 namespace NetRunner.Core
 {
+    /// <summary>
+    /// Thrown when an action is not valid.
+    /// This indicates that the game is out of sync for the player who created the action.
+    /// </summary>
     [Serializable]
     public class IllegalActionException : Exception
     {

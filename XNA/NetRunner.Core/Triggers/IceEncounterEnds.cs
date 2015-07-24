@@ -9,9 +9,9 @@ namespace NetRunner.Core.Triggers
 {
     public class IceEncounterEnds : PostTrigger
     {
-        private ISelector<PieceOfIce> mIceSelector;
+        private ISelector<PieceOfIceCardBehaviour> mIceSelector;
         
-        public IceEncounterEnds(ISelector<PieceOfIce> iceSelector)
+        public IceEncounterEnds(ISelector<PieceOfIceCardBehaviour> iceSelector)
         {
             mIceSelector = iceSelector;
         }

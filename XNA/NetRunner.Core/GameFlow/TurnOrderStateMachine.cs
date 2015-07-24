@@ -6,6 +6,9 @@ using System.Text;
 
 namespace NetRunner.Core.GameFlow
 {
+    /// <summary>
+    /// This flow defines the process for taking turns.
+    /// </summary>
     public class TurnOrderStateMachine : StateMachineBase
     {
         public enum StateName
@@ -41,6 +44,9 @@ namespace NetRunner.Core.GameFlow
         {
             _Machine = new StateMachine<StateName, Trigger>(() => State, s => State = s);
 
+            // We need to use a Auto state here to jump into the first actual state as that
+            // state has an OnEntry() action. Without this Auto state, that action would
+            // never fire.
             _Machine.Configure(StateName.Auto)
                 .Permit(Trigger.Auto, StateName.Corp_1_1_PaidAbilityWindow);
 

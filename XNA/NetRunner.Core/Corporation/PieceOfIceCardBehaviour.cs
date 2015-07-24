@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetRunner.Core.Corporation
 {
-    public class PieceOfIce : CorporationCard, IRezableCard, IServerCard
+    public abstract class PieceOfIceCardBehaviour : CorporationCardBehaviour, IRezableCard, IServerCard
     {
         public int RezCost { get; private set; }
         public int Strength { get; private set; }
@@ -14,8 +14,8 @@ namespace NetRunner.Core.Corporation
 
         public Server Server { get; set; }
 
-        public PieceOfIce(int id, string title, int influence, CorporationFaction faction, int rezCost, int strength, IceTypes iceTypes)
-            : base(id, title, influence, faction)
+        public PieceOfIceCardBehaviour(Card card, int influence, CorporationFaction faction, int rezCost, int strength, IceTypes iceTypes)
+            : base(card, influence, faction)
         {
             RezCost = rezCost;
             Strength = strength;

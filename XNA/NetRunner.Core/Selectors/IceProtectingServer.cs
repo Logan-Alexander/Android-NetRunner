@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetRunner.Core.Selectors
 {
-    public class IceProtectingServer : ISelector<PieceOfIce>
+    public class IceProtectingServer : ISelector<PieceOfIceCardBehaviour>
     {
         public ISelector<Server> mServerSelector { get; private set; }
 
@@ -24,17 +24,20 @@ namespace NetRunner.Core.Selectors
             get { return mServerSelector.IsResolved; }
         }
 
-        public IEnumerable<PieceOfIce> Items
+        public IEnumerable<PieceOfIceCardBehaviour> Items
         {
             get
             {
                 if (IsResolved)
                 {
-                    return mServerSelector.Items.SelectMany(s => s.Ice);
+                    return mServerSelector.Items
+                        .SelectMany(s => s.Ice)
+                        .Select(c => c.Behaviour)
+                        .Cast<PieceOfIceCardBehaviour>();
                 }
                 else
                 {
-                    return Enumerable.Empty<PieceOfIce>();
+                    return Enumerable.Empty<PieceOfIceCardBehaviour>();
                 }
             }
         }

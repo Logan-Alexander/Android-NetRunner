@@ -96,7 +96,7 @@ namespace NetRunner.Core.GameManagement
             // This will allow the corporation to confirm that action was received and
             // applied.
             ActionBase responseForCorporation = action.Clone();
-            responseForCorporation.AddInformationForCorporation();
+            responseForCorporation.AddInformationForCorporation(Context, Flow);
             foreach (var corporationConnector in mCorporationConnectors)
             {
                 corporationConnector.SendAction(responseForCorporation);
@@ -104,7 +104,7 @@ namespace NetRunner.Core.GameManagement
             
             // Send the action to all runner connectors.
             ActionBase responseForRunner = action.Clone();
-            responseForRunner.AddInformationForRunner();
+            responseForRunner.AddInformationForRunner(Context, Flow);
             foreach (var runnerConnector in mRunnerConnectors)
             {
                 runnerConnector.SendAction(responseForRunner);
@@ -130,7 +130,7 @@ namespace NetRunner.Core.GameManagement
             // This will allow the runner to confirm that action was received and
             // applied.
             ActionBase responseForRunner = action.Clone();
-            responseForRunner.AddInformationForRunner();
+            responseForRunner.AddInformationForRunner(Context, Flow);
             foreach (var runnerConnector in mRunnerConnectors)
             {
                 runnerConnector.SendAction(responseForRunner);
@@ -138,7 +138,7 @@ namespace NetRunner.Core.GameManagement
 
             // Send the action to all runner connectors.
             ActionBase responseForCorporation = action.Clone();
-            responseForCorporation.AddInformationForCorporation();
+            responseForCorporation.AddInformationForCorporation(Context, Flow);
             foreach (var corporationConnector in mCorporationConnectors)
             {
                 corporationConnector.SendAction(responseForCorporation);
@@ -146,6 +146,5 @@ namespace NetRunner.Core.GameManagement
 
             action.ApplyToServer(Context, Flow);
         }
-
     }
 }

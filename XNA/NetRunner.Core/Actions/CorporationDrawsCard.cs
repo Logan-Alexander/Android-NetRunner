@@ -9,9 +9,9 @@ namespace NetRunner.Core.Actions
     public class CorporationDrawsCard : ActionBase
     {
         /// <summary>
-        /// The name of the card that was drawn.
+        /// The ID of the card that was drawn.
         /// </summary>
-        public string CardName { get; private set; }
+        public CardBehaviourID CardBehaviourID { get; private set; }
 
         public CorporationDrawsCard()
         {
@@ -25,20 +25,27 @@ namespace NetRunner.Core.Actions
 
         public override void ApplyToCorporation(GameContext context, Flow flow)
         {
-            // TODO: Identify the card: context.IdentifityCard(TopCardOfR&D, CardName);
+            Card card = context.ResearchAndDevelopment.DrawPile.Peek();
+            card.IdentifyCard(CardBehaviourID);
+            
             base.ApplyToCorporation(context, flow);
         }
 
         protected override void ApplyToAll(GameContext context, Flow flow)
         {
-            // TODO: Move the top card of R&D to HQ.
+            Card card = context.ResearchAndDevelopment.DrawPile.Pop();
+            card.KnownToCorporation = true;
+            context.HeadQuarters.Hand.Add(card);
+
             flow.Fire(Trigger.CorporationCardDrawn);
+
+            base.ApplyToAll(context, flow);
         }
 
-        public override void AddInformationForCorporation()
+        public override void AddInformationForCorporation(GameContext context, Flow flow)
         {
-            // TODO: Set this to the top card of R&D.
-            CardName = "TODO"; 
+            Card card = context.ResearchAndDevelopment.DrawPile.Peek();
+            CardBehaviourID = card.Behaviour.CardBehaviourID; 
         }
 
         protected override ActionBase CreateInstanceForClone()
@@ -49,7 +56,7 @@ namespace NetRunner.Core.Actions
         public override ActionBase Clone()
         {
             CorporationDrawsCard clone = (CorporationDrawsCard)base.Clone();
-            clone.CardName = this.CardName;
+            clone.CardBehaviourID = this.CardBehaviourID;
             return clone;
         }
     }

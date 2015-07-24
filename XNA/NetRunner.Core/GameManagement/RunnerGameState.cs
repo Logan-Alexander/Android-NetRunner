@@ -10,15 +10,17 @@ namespace NetRunner.Core.GameManagement
     /// Provides a complete and transportable description of the game from the
     /// Runner's point of view.
     /// </summary>
-    [Serializable]
     public class RunnerGameState
     {
-        public object SerlaizedState { get; private set; }
+        public string SerializedGameContext { get; private set; }
+        public SerializedFlow SerializedFlow { get; private set; }
 
         public RunnerGameState(GameContext gameContext, Flow flow)
         {
-            // TODO: Create state from context.
-            SerlaizedState = flow.Serialize();
+            GameContextSerializer gameContextSerializer = new GameContextSerializer();
+            SerializedGameContext = gameContextSerializer.Serialize(gameContext, PlayerType.Runner);
+
+            SerializedFlow = flow.Serialize();
         }
     }
 }

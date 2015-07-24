@@ -14,7 +14,7 @@ namespace NetRunner.Core.ContinuousEffects
             context.ActiveContinuousEffects.Add(this);
         }
 
-        public virtual void ModifyIceIntent(GameContext context, PieceOfIce pieceOfIce, ModifyIceIntent intent) { }
+        public virtual void ModifyIceIntent(GameContext context, PieceOfIceCardBehaviour pieceOfIce, ModifyIceIntent intent) { }
 
         public virtual void ModifyRezIntent(GameContext context, IRezableCard rezableCard, ModifyRezIntent intent) { }
     }

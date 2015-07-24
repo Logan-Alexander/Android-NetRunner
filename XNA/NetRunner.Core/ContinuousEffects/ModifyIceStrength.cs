@@ -11,10 +11,10 @@ namespace NetRunner.Core.ContinuousEffects
 {
     public class ModifyIceStrength : ContinuousEffect
     {
-        private ISelector<PieceOfIce> mIceSelector;
+        private ISelector<PieceOfIceCardBehaviour> mIceSelector;
         private int mAmount;
 
-        public ModifyIceStrength(ISelector<PieceOfIce> iceSelector, int amount)
+        public ModifyIceStrength(ISelector<PieceOfIceCardBehaviour> iceSelector, int amount)
         {
             mIceSelector = iceSelector;
             mAmount = amount;
@@ -26,7 +26,7 @@ namespace NetRunner.Core.ContinuousEffects
             mIceSelector.Resolve(context);
         }
 
-        public override void ModifyIceIntent(GameContext context, PieceOfIce ice, ModifyIceIntent intent)
+        public override void ModifyIceIntent(GameContext context, PieceOfIceCardBehaviour ice, ModifyIceIntent intent)
         {
             if (mIceSelector.IsResolved && mIceSelector.Items.Contains(ice))
             {

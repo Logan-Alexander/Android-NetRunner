@@ -9,15 +9,15 @@ namespace NetRunner.Core.Corporation
     {
         public ServerType ServerType { get; private set; }
 
-        public List<PieceOfIce> Ice { get; private set; }
+        public List<Card> Ice { get; private set; }
 
-        public List<Upgrade> Upgrades { get; private set; }
+        public List<Card> Upgrades { get; private set; }
 
         public Server(ServerType serverType)
         {
             ServerType = serverType;
-            Ice = new List<PieceOfIce>();
-            Upgrades = new List<Upgrade>();
+            Ice = new List<Card>();
+            Upgrades = new List<Card>();
         }
     }
 }

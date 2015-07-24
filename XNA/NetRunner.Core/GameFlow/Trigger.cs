@@ -5,6 +5,10 @@ using System.Text;
 
 namespace NetRunner.Core.GameFlow
 {
+    /// <summary>
+    /// A list of the triggers that can be used to indicate an action.
+    /// Every action that modifies the flow will fire one of these triggers.
+    /// </summary>
     public enum Trigger
     {
         // Common Triggers,

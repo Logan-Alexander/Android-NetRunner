@@ -38,10 +38,37 @@ namespace NetRunner.UI.Xna.Components
 
         private void CreateHostedGame()
         {
+            GameSetup setup = new GameSetup();
+            
+            setup.RunnerFaction = Core.Runner.RunnerFaction.Anarch;
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+            setup.RunnerDeck.Add(new CardBehaviourID(CardSet.CoreSet, 50));
+
+            setup.CorporationFaction = Core.Corporation.CorporationFaction.Jinteki;
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+            setup.CorporationDeck.Add(new CardBehaviourID(CardSet.CoreSet, 110));
+
             // Create the GameContext. This will hold all information about the game.
-            GameContext gameContext = new GameContext();
-            Flow stack = new Flow();
-            stack.Fire(Trigger.GameStarts);
+            GameContext gameContext = new GameContext(setup);
+            
+            Flow flow = new Flow();
+            flow.Fire(Trigger.GameStarts);
 
             // Create a HostedGame.
             // This will allow information about the game to be broadcast to all players.
@@ -49,7 +76,7 @@ namespace NetRunner.UI.Xna.Components
             // For example, when the Corporation draws a card, the Corporation will be told
             // which card was moved from R&D to Headquarters. The Runner will only be told
             // that a card was moved.
-            _HostedGame = new HostedGame(gameContext, stack);
+            _HostedGame = new HostedGame(gameContext, flow);
 
             // An "in-memory" game connector allows information to flow directly from clients
             // to the hosted game. In a local game, this will be sufficient.

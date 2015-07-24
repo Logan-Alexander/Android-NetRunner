@@ -5,6 +5,11 @@ using System.Text;
 
 namespace NetRunner.Core.GameFlow
 {
+    /// <summary>
+    /// The Flow stores all details about where we are in the game lifecycle.
+    /// This information is represented as a nested set (stack) of small workflows,
+    /// each of which is a state machine.
+    /// </summary>
     public class Flow
     {
         private Stack<StateMachineBase> _Stack = new Stack<StateMachineBase>();
@@ -14,10 +19,10 @@ namespace NetRunner.Core.GameFlow
             Add(new MainStateMachine(this));
         }
 
-        public Flow(object serializedState)
+        public Flow(SerializedFlow serializedFlow)
         {
             //TODO: Implement this properly when the serialize method has been implemented.
-            Flow stack = (Flow)serializedState;
+            Flow stack = serializedFlow.Flow;
             
             foreach (StateMachineBase item in stack._Stack.Reverse())
             {
@@ -72,11 +77,11 @@ namespace NetRunner.Core.GameFlow
             CurrentStateMachine.Fire(trigger);
         }
 
-        internal object Serialize()
+        internal SerializedFlow Serialize()
         {
             // TODO: Create an object which represents the state of each state machine
             // in the stack so that it can be transported around.
-            return this;
+            return new SerializedFlow(this);
         }
 
         public override string ToString()

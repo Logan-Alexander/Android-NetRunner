@@ -6,6 +6,10 @@ using System.Text;
 
 namespace NetRunner.Core.GameFlow
 {
+    /// <summary>
+    /// Represents the top-most level of flow. This state machine handles the game setup,
+    /// (deck building and initial hand mulligans) and then transitions to InGame.
+    /// </summary>
     public class MainStateMachine : StateMachineBase
     {
         public enum StateName
