@@ -47,9 +47,9 @@ namespace NetRunner.UI.Xna.Components
 
             // Our model of the card in 3D space will be centered around the origin (0, 0, 0).
             // The top of the card will be pointing in the +Y axis.
-            // The front of the card will be facing the +Z axis. This is a little confusing
+            // The front of the card will be facing the -Z axis. This is a little confusing
             // as when we draw the card we will likely want to see the face. It's just a
-            // convention that models face "forwards" when they are looking to the +Z axis.
+            // convention that models face "forwards" when they are looking to the -Z axis.
 
             // Top-left of card (when looking at the front)
             VertexPositionTexture v1 = new VertexPositionTexture(
@@ -100,6 +100,14 @@ namespace NetRunner.UI.Xna.Components
 
             _IndexBuffer.Dispose();
             _IndexBuffer = null;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            foreach (Card card in Cards)
+            {
+                card.Location.Update(gameTime);
+            }
         }
 
         public override void Draw(GameTime gameTime)

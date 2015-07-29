@@ -60,7 +60,7 @@ namespace NetRunner.UI.Xna
             // Set the camera to be 0.5m above the table, looking down.
             // For the camera, we want "up" to be the edge of the table that's
             // far away from us, which in our 3D world is the direction of the -Z axis.
-            _Camera.Set(new Vector3(0, 0.5f, 0), new Vector3(0, 0, 0), new Vector3(0, 0, -1));
+            _Camera.Set(new Vector3(0, 0.5f, 0.5f), new Vector3(0, 0, 0), new Vector3(0, 0, -1));
         }
 
         /// <summary>

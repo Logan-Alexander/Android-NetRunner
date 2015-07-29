@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Card.cs" />
     <Compile Include="Components\Camera.cs" />
-    <Compile Include="Components\Cards.cs" />
+    <Compile Include="Components\CardsUI.cs" />
     <Compile Include="Components\ICorporationGameService.cs" />
     <Compile Include="Components\IRunnerGameService.cs" />
     <Compile Include="Components\LocalGameComponent.cs" />
