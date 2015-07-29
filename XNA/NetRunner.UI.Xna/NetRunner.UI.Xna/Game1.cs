@@ -28,6 +28,8 @@ namespace NetRunner.UI.Xna
         private ConsoleUI _Console;
         private KeyboardManager _KeyboardManager;
         private LocalGameComponent _LocalGame;
+        private Camera _Camera;
+        private CardsUI _Cards;
 
         public Game1()
         {
@@ -39,6 +41,8 @@ namespace NetRunner.UI.Xna
             _Console = new ConsoleUI(this);
             _KeyboardManager = new KeyboardManager(this);
             _LocalGame = new LocalGameComponent(this);
+            _Camera = new Camera(this);
+            _Cards = new CardsUI(this);
         }
 
         /// <summary>
@@ -52,6 +56,11 @@ namespace NetRunner.UI.Xna
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            // Set the camera to be 0.5m above the table, looking down.
+            // For the camera, we want "up" to be the edge of the table that's
+            // far away from us, which in our 3D world is the direction of the -Z axis.
+            _Camera.Set(new Vector3(0, 0.5f, 0), new Vector3(0, 0, 0), new Vector3(0, 0, -1));
         }
 
         /// <summary>
@@ -65,6 +74,27 @@ namespace NetRunner.UI.Xna
             font1 = Content.Load<SpriteFont>("Fonts/SpriteFont1");
 
             // TODO: use this.Content to load your game content here
+            Card card1 = new Card();
+            card1.FrontTexture = Content.Load<Texture2D>("Textures/CardFrontHedgeFund");
+            card1.BackTexture = Content.Load<Texture2D>("Textures/CardBackCorporation");
+            card1.Location = new StationaryCardLocation()
+            {
+                Position = new Vector3(0, 0.01f, 0), // The card is resting just on the table.
+                Forward = new Vector3(0, 1, 0), // The card is lying on the table, so forwards is +Y.
+                Up = new Vector3(0, 0, -1) // The card is facing the player (who is at +Z), so up is away from the player (-Z).
+            };
+            _Cards.Cards.Add(card1);
+
+            Card card2 = new Card();
+            card2.FrontTexture = Content.Load<Texture2D>("Textures/CardFrontHedgeFund");
+            card2.BackTexture = Content.Load<Texture2D>("Textures/CardBackCorporation");
+            card2.Location = new StationaryCardLocation()
+            {
+                Position = new Vector3(0.1f, 0.02f, 0.1f), // The card is resting just on the table and on top of card1.
+                Forward = new Vector3(0, -1, 0), // The card is lying on the table face down, so forwards is -Y.
+                Up = new Vector3(0, 0, -1) // The card is facing the player (who is at +Z), so up is away from the player (-Z).
+            };
+            _Cards.Cards.Add(card2);
         }
 
         /// <summary>
