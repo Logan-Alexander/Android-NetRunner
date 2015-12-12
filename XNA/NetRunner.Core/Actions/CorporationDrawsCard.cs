@@ -12,7 +12,8 @@ namespace NetRunner.Core.Actions
         /// The ID of the card that was drawn.
         /// </summary>
         public CardBehaviourID CardBehaviourID { get; private set; }
-
+        public Card Card { get; private set; }
+        
         public CorporationDrawsCard()
         {
             DeferExecution = true;
@@ -33,9 +34,9 @@ namespace NetRunner.Core.Actions
 
         protected override void ApplyToAll(GameContext context, Flow flow)
         {
-            Card card = context.ResearchAndDevelopment.DrawPile.Pop();
-            card.KnownToCorporation = true;
-            context.HeadQuarters.Hand.Add(card);
+            Card = context.ResearchAndDevelopment.DrawPile.Pop();
+            Card.KnownToCorporation = true;
+            context.HeadQuarters.Hand.Add(Card);
 
             flow.Fire(Trigger.CorporationCardDrawn);
 

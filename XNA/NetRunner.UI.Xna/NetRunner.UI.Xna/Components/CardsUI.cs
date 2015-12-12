@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NetRunner.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,20 @@ using System.Text;
 
 namespace NetRunner.UI.Xna.Components
 {
+    public interface ICardsUI
+    {
+        bool TryFindCard(Card card, out DrawableCard drawableCard);
+
+        DrawableCard CreateCard(Card card, ICardLocation location);
+    }
+
     /// <summary>
     /// This component will draw a set of cards. These cards are purely for the UI and
     /// have a loose relationship with the cards in the actual game. This enables us
     /// to do animations and other stuff to the cards rather than everything happening
     /// instanteously.
     /// </summary>
-    public class CardsUI : DrawableGameComponent
+    public class CardsUI : DrawableGameComponent, ICardsUI
     {
         private ICamera _Camera;
 
@@ -21,14 +29,19 @@ namespace NetRunner.UI.Xna.Components
         private IndexBuffer _IndexBuffer;
         private BasicEffect _Effect;
 
-        public List<Card> Cards {get; set;}
+        private Texture2D _CorporationTexture;
+        private Texture2D _RunnerTexture;
+        private Texture2D _HedgeFundTexture;
+
+        private List<DrawableCard> _Cards;
 
         public CardsUI(Game game)
             : base(game)
         {
-            Cards = new List<Card>();
-            
             game.Components.Add(this);
+            game.Services.AddService(typeof(ICardsUI), this);
+            
+            _Cards = new List<DrawableCard>();
         }
 
         public override void Initialize()
@@ -88,6 +101,11 @@ namespace NetRunner.UI.Xna.Components
 
             _IndexBuffer = new IndexBuffer(GraphicsDevice, typeof(short), 12, BufferUsage.WriteOnly);
             _IndexBuffer.SetData(indicies);
+
+            // Load textures
+            _CorporationTexture = Game.Content.Load<Texture2D>("Textures/CardBackCorporation");
+            //_RunnerTexture = Game.Content.Load<Texture2D>("Textures/CardBackRunner");
+            _HedgeFundTexture = Game.Content.Load<Texture2D>("Textures/CardFrontHedgeFund");
         }
 
         protected override void UnloadContent()
@@ -104,9 +122,9 @@ namespace NetRunner.UI.Xna.Components
 
         public override void Update(GameTime gameTime)
         {
-            foreach (Card card in Cards)
+            foreach (DrawableCard card in _Cards)
             {
-                card.Location.Update(gameTime);
+                card.Animation.Update(gameTime);
             }
         }
 
@@ -120,27 +138,78 @@ namespace NetRunner.UI.Xna.Components
             _Effect.View = _Camera.ViewMatrix;
             _Effect.Projection = _Camera.PerspectiveMatrix;
 
-            foreach (Card card in Cards)
+            foreach (DrawableCard drawableCard in _Cards)
             {
                 _Effect.World = Matrix.CreateWorld(
-                    card.Location.Position,
-                    card.Location.Forward,
-                    card.Location.Up);
+                    drawableCard.Location.Position,
+                    drawableCard.Location.Forward,
+                    drawableCard.Location.Up);
 
-                _Effect.Texture = card.FrontTexture;
-                foreach (EffectPass pass in _Effect.CurrentTechnique.Passes)
+                if (drawableCard.Card.CardIsIdentified)
                 {
-                    pass.Apply();
-                    GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
+                    _Effect.Texture = GetFrontTexture(drawableCard.Card.Behaviour);
+                    foreach (EffectPass pass in _Effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
+                    }
                 }
 
-                _Effect.Texture = card.BackTexture;
+                _Effect.Texture = _Effect.Texture = GetBackTexture(drawableCard.Card.PlayerType);
                 foreach (EffectPass pass in _Effect.CurrentTechnique.Passes)
                 {
                     pass.Apply();
                     GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 6, 2);
                 }
             }
+        }
+
+        private Texture2D GetBackTexture(PlayerType playerType)
+        {
+            switch (playerType)
+            {
+                case PlayerType.Corporation:
+                    return _CorporationTexture;
+
+                case PlayerType.Runner:
+                    return _RunnerTexture;
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        private Texture2D GetFrontTexture(CardBehaviour cardBehaviour)
+        {
+            switch (cardBehaviour.Title)
+            {
+                case "Hedge Fund":
+                    return _HedgeFundTexture;
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public bool TryFindCard(Card card, out DrawableCard drawableCard)
+        {
+            drawableCard = _Cards.SingleOrDefault(c => c.Card == card);
+
+            return drawableCard != null;
+        }
+
+        public DrawableCard CreateCard(Card card, ICardLocation location)
+        {
+            if (_Cards.Any(c => c.Card == card))
+            {
+                throw new InvalidOperationException("A DrawableCard already exists for this card.");
+            }
+
+            DrawableCard drawableCard = new DrawableCard(card, location);
+            
+            _Cards.Add(drawableCard);
+            
+            return drawableCard;
         }
     }
 }

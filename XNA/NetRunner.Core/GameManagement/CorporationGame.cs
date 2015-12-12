@@ -25,6 +25,16 @@ namespace NetRunner.Core.GameManagement
             }
         }
 
+        public event EventHandler<ActionEventArgs> ActionTaken;
+        protected void OnActionTaken(ActionEventArgs e)
+        {
+            EventHandler<ActionEventArgs> temp = ActionTaken;
+            if (temp != null)
+            {
+                temp(this, e);
+            }
+        }
+
         private ICorporationConnectorClientSide _Connector;
         public GameContext Context { get; private set; }
         public Flow Flow { get; private set; }
@@ -117,6 +127,9 @@ namespace NetRunner.Core.GameManagement
             if (!action.DeferExecution || !sendToHostedGame)
             {
                 action.ApplyToCorporation(Context, Flow);
+
+                OnActionTaken(new ActionEventArgs(action));
+
                 WaitingForDeferedExection = false;
             }
             else

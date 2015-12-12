@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NetRunner.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,45 @@ namespace NetRunner.UI.Xna
     /// laying on top of one another may be too close together for the depth buffer to
     /// handle properly.
     /// </summary>
-    public class Card
+    public class DrawableCard
     {
+        public Card Card { get; set; }
+
         public Texture2D FrontTexture { get; set; }
         public Texture2D BackTexture { get; set; }
 
-        public ICardLocation Location { get; set; }
+        public ICardAnimation Animation { get; set; }
+        
+        public ICardLocation Location
+        {
+            get { return Animation.Location; }
+        }
+
+        public DrawableCard(Card card, ICardLocation location)
+        {
+            Card = card;
+            Animation = new NoAnimation(location);
+        }
+    }
+
+    public interface ICardAnimation
+    {
+        ICardLocation Location { get; }
+        void Update(GameTime gameTime);
+    }
+
+    public class NoAnimation: ICardAnimation
+    {
+        public ICardLocation Location { get; private set; }
+
+        public NoAnimation(ICardLocation location)
+        {
+            Location = location;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+        }
     }
 
     /// <summary>
@@ -35,11 +69,6 @@ namespace NetRunner.UI.Xna
         public Vector3 Position { get; set; }
         public Vector3 Forward { get; set; }
         public Vector3 Up { get; set; }
-
-        public void Update(GameTime gameTime)
-        {
-            // Nothing to update - it's stationary!
-        }
     }
 
     /// <summary>
@@ -50,7 +79,5 @@ namespace NetRunner.UI.Xna
         Vector3 Position { get; }
         Vector3 Forward { get; }
         Vector3 Up { get; }
-
-        void Update(GameTime gameTime);
     }
 }
