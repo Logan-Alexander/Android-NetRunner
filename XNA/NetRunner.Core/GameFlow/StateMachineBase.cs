@@ -30,5 +30,7 @@ namespace NetRunner.Core.GameFlow
         }
 
         public abstract string Description { get; }
+
+        public abstract IEnumerable<Trigger> PermittedTriggers { get; }
     }
 }

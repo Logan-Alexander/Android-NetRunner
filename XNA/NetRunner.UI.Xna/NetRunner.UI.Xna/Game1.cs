@@ -14,6 +14,7 @@ using NetRunner.Core.Actions;
 using System.Diagnostics;
 using NetRunner.Core.CardIdentifiers;
 using NetRunner.UI.Xna.Layout;
+using NetRunner.Core.GameFlow;
 
 namespace NetRunner.UI.Xna
 {
@@ -159,6 +160,7 @@ namespace NetRunner.UI.Xna
 
             spriteBatch.Begin();
 
+            // TEMPORARY: Color each area to show that the layout works.
             spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.ToTheRunner, Color.Red * 0.9f);
             spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Content, Color.Blue * 0.9f);
             spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CardList, Color.Blue * 0.8f);
@@ -168,8 +170,9 @@ namespace NetRunner.UI.Xna
             spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Status, Color.Blue * 0.5f);
             spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Summary, Color.Blue * 0.4f);
 
-            int x = _LayoutService.CorporationLayout.Console.X;
-            int y = _LayoutService.CorporationLayout.Console.Top;
+            // TEMPORARY: Write the descrioption of the game flow to the "Console" area.
+            int x = _LayoutService.CorporationLayout.Console.X + 8;
+            int y = _LayoutService.CorporationLayout.Console.Top + 8;
 
             string state = _LocalGame.CorporationGame.Flow.ToString();
             spriteBatch.DrawString(font1, state, new Vector2(x, y), Color.White);
@@ -178,7 +181,51 @@ namespace NetRunner.UI.Xna
             string corpInfo = string.Format("The corporation has {0} card(s) in their hand.", corpHandCount);
             spriteBatch.DrawString(font1, corpInfo, new Vector2(x, y + 16), Color.White);
 
+            // TEMPROARY: Write the list of available actions to the "Status" area.
+            List<string> actions = new List<string>();
+            foreach (Trigger trigger in _LocalGame.CorporationGame.Flow.CurrentStateMachine.PermittedTriggers)
+            {
+                switch (trigger)
+                {
+                    case Trigger.CorporationCardDrawn:
+                        actions.Add("- Draw card at start of turn");
+                        break;
+
+                    case Trigger.CorporationPasses:
+                        actions.Add("- Pass");
+                        break;
+
+                    case Trigger.CorporationRezzesNonIce:
+                        actions.Add("- Rez an assert or upgrade");
+                        break;
+
+                    case Trigger.CorporationScoresAgenda:
+                        actions.Add("- Score an agenda");
+                        break;
+
+                    case Trigger.CorporationUsesPaidAbility:
+                        actions.Add("- Use paid ability");
+                        break;
+
+                    default:
+                        // No acitons.
+                        break;
+                }
+            }
+
+            x = _LayoutService.CorporationLayout.Status.Left + 8;
+            y = _LayoutService.CorporationLayout.Status.Top + 8;
+
+            foreach (string action in actions)
+            {
+                spriteBatch.DrawString(font1, action, new Vector2(x, y), Color.White);
+                y += 32;
+            }
+
             spriteBatch.End();
+
+
+
 
             base.Draw(gameTime);
         }

@@ -83,5 +83,10 @@ namespace NetRunner.Core.GameFlow
                 }
             }
         }
+
+        public override IEnumerable<Trigger> PermittedTriggers
+        {
+            get { return _Machine.PermittedTriggers; }
+        }
     }
 }
