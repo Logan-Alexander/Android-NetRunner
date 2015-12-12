@@ -13,6 +13,7 @@ using GrahamThomson.Xna.Common;
 using NetRunner.Core.Actions;
 using System.Diagnostics;
 using NetRunner.Core.CardIdentifiers;
+using NetRunner.UI.Xna.Layout;
 
 namespace NetRunner.UI.Xna
 {
@@ -24,11 +25,13 @@ namespace NetRunner.UI.Xna
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont font1;
+        Texture2D _TemporaryTexture;
 
         private ConsoleUI _Console;
         private KeyboardManager _KeyboardManager;
         private LocalGameComponent _LocalGame;
         private Camera _Camera;
+        private LayoutService _LayoutService;
         private CardsUI _Cards;
         private VisualManager _ActionManager;
         private NetRunnerSoundManager _NetRunnerSoundManager;
@@ -36,7 +39,14 @@ namespace NetRunner.UI.Xna
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+
+            Window.Title = "Android: NetRunner";
+
             graphics.IsFullScreen = false;
+            Window.AllowUserResizing = true;
+            System.Windows.Forms.Form form = (System.Windows.Forms.Form)System.Windows.Forms.Form.FromHandle(Window.Handle);
+            form.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
 
@@ -46,6 +56,7 @@ namespace NetRunner.UI.Xna
             _Cards = new CardsUI(this);
             _ActionManager = new VisualManager(this);
             _NetRunnerSoundManager = new NetRunnerSoundManager(this);
+            _LayoutService = new LayoutService(this);
 
             _Console = new ConsoleUI(this);
         }
@@ -77,6 +88,10 @@ namespace NetRunner.UI.Xna
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font1 = Content.Load<SpriteFont>("Fonts/SpriteFont1");
+
+            // Create a 1x1 white texture.
+            _TemporaryTexture= new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            _TemporaryTexture.SetData(new Color[1] { Color.White });
         }
 
         /// <summary>
@@ -86,6 +101,12 @@ namespace NetRunner.UI.Xna
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+
+            if (_TemporaryTexture != null)
+            {
+                _TemporaryTexture.Dispose();
+                _TemporaryTexture = null;
+            }
         }
 
         /// <summary>
@@ -134,20 +155,28 @@ namespace NetRunner.UI.Xna
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
 
-            int bottom = GraphicsDevice.Viewport.TitleSafeArea.Bottom;
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.ToTheRunner, Color.Red * 0.9f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Content, Color.Blue * 0.9f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CardList, Color.Blue * 0.8f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Console, Color.Blue * 0.7f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Menu, Color.White);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CardCloseUp, Color.Blue * 0.6f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Status, Color.Blue * 0.5f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Summary, Color.Blue * 0.4f);
+
+            int x = _LayoutService.CorporationLayout.Console.X;
+            int y = _LayoutService.CorporationLayout.Console.Top;
 
             string state = _LocalGame.CorporationGame.Flow.ToString();
-            spriteBatch.DrawString(font1, state, new Vector2(0, bottom - 32), Color.White);
+            spriteBatch.DrawString(font1, state, new Vector2(x, y), Color.White);
 
             int corpHandCount = _LocalGame.CorporationGame.Context.HeadQuarters.Hand.Count;
             string corpInfo = string.Format("The corporation has {0} card(s) in their hand.", corpHandCount);
-            spriteBatch.DrawString(font1, corpInfo, new Vector2(0, bottom - 16), Color.White);
+            spriteBatch.DrawString(font1, corpInfo, new Vector2(x, y + 16), Color.White);
 
             spriteBatch.End();
 
