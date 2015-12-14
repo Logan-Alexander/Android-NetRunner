@@ -67,7 +67,7 @@ namespace NetRunner.UI.Xna.Components
             // Create the GameContext. This will hold all information about the game.
             GameContext gameContext = new GameContext(setup);
             
-            Flow flow = new Flow();
+            Flow flow = new Flow(gameContext);
             flow.Fire(Trigger.GameStarts);
 
             // Create a HostedGame.

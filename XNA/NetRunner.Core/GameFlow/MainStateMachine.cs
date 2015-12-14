@@ -10,7 +10,7 @@ namespace NetRunner.Core.GameFlow
     /// Represents the top-most level of flow. This state machine handles the game setup,
     /// (deck building and initial hand mulligans) and then transitions to InGame.
     /// </summary>
-    public class MainStateMachine : StateMachineBase
+    public class MainStateMachine : StateMachineBase<MainStateMachine.StateName>
     {
         public enum StateName
         {
@@ -19,51 +19,28 @@ namespace NetRunner.Core.GameFlow
             InGame
         }
 
-        public StateName State { get; private set; }
-        private StateMachine<StateName, Trigger> _Machine;
-
         public MainStateMachine(Flow stack)
             : this(stack, StateName.Setup)
         {
         }
 
         public MainStateMachine(Flow stack, StateName state)
-            : base(stack)
+            : base(stack, state)
         {
-            State = state;
-            CreateStateMachine();
         }
 
-        private void CreateStateMachine()
+        protected override void ConfigureStateMachine(StateMachine<StateName, Trigger> machine)
         {
-            _Machine = new StateMachine<StateName, Trigger>(() => State, s => State = s);
-
-            _Machine.Configure(StateName.Setup)
+            machine.Configure(StateName.Setup)
                 .Permit(Trigger.GameStarts, StateName.InGame);
 
-            _Machine.Configure(StateName.InGame)
+            machine.Configure(StateName.InGame)
                 .OnEntry(() => CreateTurnOrderStateMachine());
-        }
-
-        internal override void ContinueAfterChildCompletes()
-        {
-            // Nothing to do here as the TurnOrder state machine never ends gracefully,
-            // it only ends abruptly when the game is over.
         }
 
         private void CreateTurnOrderStateMachine()
         {
-            GameFlow.Add(new TurnOrderStateMachine(GameFlow));
-        }
-
-        public override void Fire(Trigger trigger)
-        {
-            _Machine.Fire(trigger);
-        }
-
-        public override bool CanFire(Trigger trigger)
-        {
-            return _Machine.CanFire(trigger);
+            AddChild(new TurnOrderStateMachine(GameFlow));
         }
 
         public override string Description
@@ -82,11 +59,6 @@ namespace NetRunner.Core.GameFlow
                         throw new NotImplementedException();
                 }
             }
-        }
-
-        public override IEnumerable<Trigger> PermittedTriggers
-        {
-            get { return _Machine.PermittedTriggers; }
         }
     }
 }

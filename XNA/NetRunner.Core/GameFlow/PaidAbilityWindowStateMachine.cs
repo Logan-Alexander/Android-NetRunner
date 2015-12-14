@@ -13,7 +13,7 @@ namespace NetRunner.Core.GameFlow
     /// The parliament ends when both players have had the opportunity to act and have
     /// consecutively passed.
     /// </summary>
-    public class PaidAbilityWindowStateMachine : StateMachineBase
+    public class PaidAbilityWindowStateMachine : StateMachineBase<PaidAbilityWindowStateMachine.StateName>
     {
         public enum StateName
         {
@@ -26,8 +26,6 @@ namespace NetRunner.Core.GameFlow
             Complete
         }
 
-        public StateName State { get; private set; }
-        private StateMachine<StateName, Trigger> _Machine;
         StateMachine<StateName, Trigger>.TriggerWithParameters<object> _ScoreAgendaTrigger;
 
         public PaidAbilityWindowOptions Options { get; private set; }
@@ -37,25 +35,10 @@ namespace NetRunner.Core.GameFlow
             Flow stack,
             PlayerType firstToAct,
             PaidAbilityWindowOptions options)
-            : base(stack)
+            : base(stack, InitialState(firstToAct))
         {
-            switch (firstToAct)
-            {
-                case PlayerType.Corporation:
-                    State = StateName.Corporation;
-                    break;
-
-                case PlayerType.Runner:
-                    State = StateName.Runner;
-                    break;
-
-                default:
-                    throw new NotSupportedException();
-            }
-
             OpponentWillHaveChanceToRespond = true;
             Options = options;
-            CreateStateMachine();
         }
 
         public PaidAbilityWindowStateMachine(
@@ -63,51 +46,63 @@ namespace NetRunner.Core.GameFlow
             StateName state,
             bool opponentWillHaveChanceToRespond,
             PaidAbilityWindowOptions options)
-            : base(stack)
+            : base(stack, state)
         {
-            State = state;
             OpponentWillHaveChanceToRespond = opponentWillHaveChanceToRespond;
             Options = options;
-            CreateStateMachine();
         }
 
-        private void CreateStateMachine()
+        private static StateName InitialState(PlayerType firstToAct)
         {
-            _Machine = new StateMachine<StateName, Trigger>(() => State, s => State = s);
+            switch (firstToAct)
+            {
+                case PlayerType.Corporation:
+                    return StateName.Corporation;
 
-            _ScoreAgendaTrigger = _Machine.SetTriggerParameters<object>(Trigger.CorporationScoresAgenda);
+                case PlayerType.Runner:
+                    return StateName.Runner;
 
-            _Machine.Configure(StateName.Corporation)
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        protected override void ConfigureStateMachine(StateMachine<StateName, Trigger> machine)
+        {
+            _ScoreAgendaTrigger = machine.SetTriggerParameters<object>(Trigger.CorporationScoresAgenda);
+            
+
+            machine.Configure(StateName.Corporation)
                 .PermitDynamic(Trigger.CorporationPasses,
                     () => OpponentWillHaveChanceToRespond
                         ? StateName.Runner
                         : StateName.Complete)
                 .OnExit(() => OpponentWillHaveChanceToRespond = false);
 
-            _Machine.Configure(StateName.Runner)
+            machine.Configure(StateName.Runner)
                 .PermitDynamic(Trigger.RunnerPasses,
                     () => OpponentWillHaveChanceToRespond
                         ? StateName.Corporation
                         : StateName.Complete)
                 .OnExit(() => OpponentWillHaveChanceToRespond = false);
 
-            _Machine.Configure(StateName.Complete)
+            machine.Configure(StateName.Complete)
                 .OnEntry(() => GameFlow.Complete());
 
             if (Options.HasFlag(PaidAbilityWindowOptions.UsePaidAbilities))
             {
-                _Machine.Configure(StateName.Corporation)
+                machine.Configure(StateName.Corporation)
                     .Permit(Trigger.CorporationUsesPaidAbility, StateName.CorporationUsingPaidAbility);
 
-                _Machine.Configure(StateName.CorporationUsingPaidAbility)
+                machine.Configure(StateName.CorporationUsingPaidAbility)
                     .OnEntry(() => OpponentWillHaveChanceToRespond = true)
                     .OnEntry(() => CreateCorporationUsingPaidAbilityStateMachine())
                     .Permit(Trigger.ChildStateMachineComplete, StateName.Corporation);
 
-                _Machine.Configure(StateName.Runner)
+                machine.Configure(StateName.Runner)
                     .Permit(Trigger.RunnerUsesPaidAbility, StateName.RunnerUsingPaidAbility);
 
-                _Machine.Configure(StateName.RunnerUsingPaidAbility)
+                machine.Configure(StateName.RunnerUsingPaidAbility)
                     .OnEntry(() => OpponentWillHaveChanceToRespond = true)
                     .OnEntry(() => CreateRunnerUsingPaidAbilityStateMachine())
                     .Permit(Trigger.ChildStateMachineComplete, StateName.Runner);
@@ -116,10 +111,10 @@ namespace NetRunner.Core.GameFlow
 
             if (Options.HasFlag(PaidAbilityWindowOptions.RezNonIce))
             {
-                _Machine.Configure(StateName.Corporation)
+                machine.Configure(StateName.Corporation)
                     .Permit(Trigger.CorporationRezzesNonIce, StateName.CorporationRezzingNonIce);
 
-                _Machine.Configure(StateName.CorporationRezzingNonIce)
+                machine.Configure(StateName.CorporationRezzingNonIce)
                     .OnEntry(() => OpponentWillHaveChanceToRespond = true)
                     .OnEntry(() => CreateCorporationRezzingNonIceStateMachine())
                     .Permit(Trigger.ChildStateMachineComplete, StateName.Corporation);
@@ -127,10 +122,10 @@ namespace NetRunner.Core.GameFlow
 
             if (Options.HasFlag(PaidAbilityWindowOptions.ScoreAgendas))
             {
-                _Machine.Configure(StateName.Corporation)
+                machine.Configure(StateName.Corporation)
                     .Permit(Trigger.CorporationScoresAgenda, StateName.CorporationScoringAgenda);
 
-                _Machine.Configure(StateName.CorporationScoringAgenda)
+                machine.Configure(StateName.CorporationScoringAgenda)
                     .OnEntry(() => OpponentWillHaveChanceToRespond = true)
                     .OnEntryFrom(_ScoreAgendaTrigger, cardIdentifier => CreateCorporationScoringAgendaStateMachine(cardIdentifier))
                     .Permit(Trigger.ChildStateMachineComplete, StateName.Corporation);
@@ -140,45 +135,30 @@ namespace NetRunner.Core.GameFlow
         private void CreateCorporationUsingPaidAbilityStateMachine()
         {
             // TODO:
-            ContinueAfterChildCompletes();
+            Fire(Trigger.ChildStateMachineComplete);
         }
 
         private void CreateRunnerUsingPaidAbilityStateMachine()
         {
             // TODO:
-            ContinueAfterChildCompletes();
+            Fire(Trigger.ChildStateMachineComplete);
         }
 
         private void CreateCorporationRezzingNonIceStateMachine()
         {
             // TODO:
-            ContinueAfterChildCompletes();
+            Fire(Trigger.ChildStateMachineComplete);
         }
 
         private void CreateCorporationScoringAgendaStateMachine(object cardIdentifier)
         {
             // TODO:
-            ContinueAfterChildCompletes();
-        }
-
-        internal override void ContinueAfterChildCompletes()
-        {
             Fire(Trigger.ChildStateMachineComplete);
         }
 
-        public override void Fire(Trigger trigger)
+        public override void ScoreAgenda(object cardIdentifier)
         {
-            _Machine.Fire(trigger);
-        }
-
-        public void CorporationScoresAgenda(object cardIdentifer)
-        {
-            _Machine.Fire(_ScoreAgendaTrigger, cardIdentifer);
-        }
-
-        public override bool CanFire(Trigger trigger)
-        {
-            return _Machine.CanFire(trigger);
+            Fire(_ScoreAgendaTrigger, cardIdentifier);
         }
 
         public override string Description
@@ -209,11 +189,6 @@ namespace NetRunner.Core.GameFlow
                         throw new NotSupportedException();
                 }
             }
-        }
-
-        public override IEnumerable<Trigger> PermittedTriggers
-        {
-            get { return _Machine.PermittedTriggers; }
         }
     }
 }

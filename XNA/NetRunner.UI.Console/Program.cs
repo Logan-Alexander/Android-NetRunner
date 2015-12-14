@@ -36,7 +36,7 @@ namespace NetRunner.UI.Console
 
             // Create the GameContext. This will hold all information about the game.
             GameContext gameContext = new GameContext(setup);
-            Flow stack = new Flow();
+            Flow stack = new Flow(gameContext);
             stack.Fire(Trigger.GameStarts);
 
             // Create a HostedGame.

@@ -34,6 +34,8 @@ namespace NetRunner.Core
 
             xGameContext.SetAttributeValue("runnerCredits", context.RunnerCredits);
             xGameContext.SetAttributeValue("corporationCredits", context.CorporationCredits);
+            xGameContext.SetAttributeValue("runnerClicks", context.RunnerClicks);
+            xGameContext.SetAttributeValue("corporationClicks", context.CorporationClicks);
 
             XElement xResearchAndDevelopment = SerializeResearchAndDevelopment(context.ResearchAndDevelopment, playerType);
             xGameContext.Add(xResearchAndDevelopment);
@@ -154,7 +156,11 @@ namespace NetRunner.Core
 
         private void DeserializeContext(GameContext context, XElement xContext)
         {
-            // TODO: Credits
+            context.RunnerCredits = int.Parse(xContext.Attribute("runnerCredits").Value);
+            context.CorporationCredits = int.Parse(xContext.Attribute("corporationCredits").Value);
+            context.RunnerClicks = int.Parse(xContext.Attribute("runnerClicks").Value);
+            context.CorporationClicks = int.Parse(xContext.Attribute("corporationClicks").Value);
+
             XElement xResearchAndDevelopment = xContext.Element("ResearchAndDevelopment");
             DeserializeResearchAndDevelopment(context.ResearchAndDevelopment, xResearchAndDevelopment);
 

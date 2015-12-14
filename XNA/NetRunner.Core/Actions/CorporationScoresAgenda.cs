@@ -105,9 +105,7 @@ namespace NetRunner.Core.Actions
             context.CorporationScoreArea.Agendas.Add(card);
 
             // TODO: Check for game end condition.
-
-            PaidAbilityWindowStateMachine stateMachine = flow.CurrentStateMachine as PaidAbilityWindowStateMachine;
-            stateMachine.CorporationScoresAgenda(CardIdentifier);
+            flow.CurrentStateMachine.ScoreAgenda(CardIdentifier);
         }
 
         public override void AddInformationForRunner(GameContext context, Flow flow)

@@ -147,6 +147,20 @@ namespace NetRunner.UI.Xna
                 _LocalGame.TakeCorporationAction(new CorporationScoresAgenda(cardIdentifier));
             }
 
+            if (_KeyboardManager.IsKeyPressed(Keys.D5, true))
+            {
+                Debug.WriteLine("Corporation take one credit.");
+                _LocalGame.TakeCorporationAction(new CorporationTakesOneCredit());
+            }
+
+            if (_KeyboardManager.IsKeyPressed(Keys.D6, true))
+            {
+                Debug.WriteLine("Corporation disacrds card.");
+                HQCardIdentifier cardIdentifier = new HQCardIdentifier(0);
+                _LocalGame.TakeCorporationAction(new CorporationDiscardsCardFromHQ(cardIdentifier));
+            }
+
+
             base.Update(gameTime);
         }
 
@@ -205,6 +219,14 @@ namespace NetRunner.UI.Xna
 
                     case Trigger.CorporationUsesPaidAbility:
                         actions.Add("- Use paid ability");
+                        break;
+
+                    case Trigger.CorporationTakesOneCredit:
+                        actions.Add("- Take one credit");
+                        break;
+
+                    case Trigger.CorporationDiscardsCardFromHQ:
+                        actions.Add("- Discard card from HQ");
                         break;
 
                     default:

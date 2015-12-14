@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Actions\ActionEventArgs.cs" />
     <Compile Include="Actions\CorporationDrawsCard.cs" />
+    <Compile Include="Actions\CorporationDiscardsCardFromHQ.cs" />
+    <Compile Include="Actions\CorporationTakesOneCredit.cs" />
     <Compile Include="Actions\CorporationScoresAgenda.cs" />
     <Compile Include="Actions\RunnerPasses.cs" />
     <Compile Include="Actions\CorporationPasses.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="CardIdentifiers\AssetOrAgendaIdentifier.cs" />
     <Compile Include="CardIdentifiers\CardIdentifier.cs" />
     <Compile Include="CardIdentifiers\CardIdentifierResolutionException.cs" />
+    <Compile Include="CardIdentifiers\HQCardIdentifier.cs" />
     <Compile Include="CardSet.cs" />
     <Compile Include="Corporation\AgendaCardBehaviour.cs" />
     <Compile Include="Corporation\AssetCardBehaviour.cs" />
@@ -98,6 +101,9 @@
     <Compile Include="Corporation\HeadQuarters.cs" />
     <Compile Include="Corporation\RemoteServer.cs" />
     <Compile Include="Corporation\ResearchAndDevelopment.cs" />
+    <Compile Include="GameFlow\CorporationActionsStateMachine.cs" />
+    <Compile Include="GameFlow\CorporationDiscardDownToMaxHandSizeStateMachine.cs" />
+    <Compile Include="GameFlow\IStateMachine.cs" />
     <Compile Include="GameFlow\MainStateMachine.cs" />
     <Compile Include="GameFlow\StateMachineBase.cs" />
     <Compile Include="GameFlow\PaidAbilityWindowStateMachine.cs" />

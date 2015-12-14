@@ -9,7 +9,7 @@ namespace NetRunner.Core.GameFlow
     /// <summary>
     /// This flow defines the process for taking turns.
     /// </summary>
-    public class TurnOrderStateMachine : StateMachineBase
+    public class TurnOrderStateMachine : StateMachineBase<TurnOrderStateMachine.StateName>
     {
         public enum StateName
         {
@@ -25,80 +25,83 @@ namespace NetRunner.Core.GameFlow
             Runner_1_1_PaidAbilityWindow,
         }
 
-        public StateName State { get; private set; }
-        private StateMachine<StateName, Trigger> _Machine;
-
         public TurnOrderStateMachine(Flow stack)
             : this(stack, StateName.Auto)
         {
         }
 
         public TurnOrderStateMachine(Flow stack, StateName state)
-            : base(stack)
+            : base(stack, state)
         {
-            State = state;
-            CreateStateMachine();
         }
 
-        private void CreateStateMachine()
+        protected override void ConfigureStateMachine(StateMachine<StateName, Trigger> machine)
         {
-            _Machine = new StateMachine<StateName, Trigger>(() => State, s => State = s);
-
             // We need to use a Auto state here to jump into the first actual state as that
             // state has an OnEntry() action. Without this Auto state, that action would
             // never fire.
-            _Machine.Configure(StateName.Auto)
+            machine.Configure(StateName.Auto)
                 .Permit(Trigger.Auto, StateName.Corp_1_1_PaidAbilityWindow);
 
-            _Machine.Configure(StateName.Corp_1_1_PaidAbilityWindow)
+            machine.Configure(StateName.Corp_1_1_PaidAbilityWindow)
                 .OnEntry(() => CreatePaidAbilityWindowStateMachine(
                     PlayerType.Corporation,
                     PaidAbilityWindowOptions.UseRezScore))
                 .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_1_2_TurnBegins);
 
-            _Machine.Configure(StateName.Corp_1_2_TurnBegins)
-                .OnEntry(() => CreateBeginTurnStateMachine(PlayerType.Corporation))
+            machine.Configure(StateName.Corp_1_2_TurnBegins)
+                .OnEntry(() => CreateBeginTurnStateMachine(
+                    PlayerType.Corporation))
                 .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_1_3_DrawOneCard);
 
-            _Machine.Configure(StateName.Corp_1_3_DrawOneCard)
+            machine.Configure(StateName.Corp_1_3_DrawOneCard)
                 .Permit(Trigger.CorporationCardDrawn, StateName.Corp_2_1_PaidAbilityWindow);
 
-            _Machine.Configure(StateName.Corp_2_1_PaidAbilityWindow)
+            machine.Configure(StateName.Corp_2_1_PaidAbilityWindow)
                 .OnEntry(() => CreatePaidAbilityWindowStateMachine(
                     PlayerType.Corporation,
                     PaidAbilityWindowOptions.UseRezScore))
                 .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_2_2_TakeActions);
-        }
 
-        internal override void ContinueAfterChildCompletes()
-        {
-            Fire(Trigger.ChildStateMachineComplete);
+            machine.Configure(StateName.Corp_2_2_TakeActions)
+                .OnEntry(() => GameFlow.Context.CorporationClicks = 3)
+                .OnEntry(() => CreateCorporationActionsStateMachine())
+                .PermitDynamic(Trigger.ChildStateMachineComplete,
+                    () => GameFlow.Context.HeadQuarters.Hand.Count > 5 // TODO: Corporation hand limit might not be 5...
+                        ? StateName.Corp_3_1_DiscardDownToMaxHandSize
+                        : StateName.Corp_3_2_PaidAbilityWindow);
+
+            machine.Configure(StateName.Corp_3_1_DiscardDownToMaxHandSize)
+                .OnEntry(() => CreateCorporationDiscardDownToMaxHandSizeStateMachine())
+                .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_3_2_PaidAbilityWindow);
+
+            machine.Configure(StateName.Corp_3_2_PaidAbilityWindow)
+                .OnEntry(() => CreatePaidAbilityWindowStateMachine(
+                    PlayerType.Corporation,
+                    PaidAbilityWindowOptions.UsePaidAbilities | PaidAbilityWindowOptions.RezNonIce))
+                .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_3_3_EndOfTurn);
+
         }
 
         private void CreatePaidAbilityWindowStateMachine(PlayerType firstToAct, PaidAbilityWindowOptions options)
         {
-            GameFlow.Add(new PaidAbilityWindowStateMachine(GameFlow, firstToAct, options));
+            AddChild(new PaidAbilityWindowStateMachine(GameFlow, firstToAct, options));
+        }
+
+        private void CreateCorporationActionsStateMachine()
+        {
+            AddChild(new CorporationActionsStateMachine(GameFlow));
         }
 
         private void CreateBeginTurnStateMachine(PlayerType playerType)
         {
-            // TODO
-            ContinueAfterChildCompletes();
+            // TODO: Create a state machine that handles "When your turn begins..." conditionals for the corporation.
+            Fire(Trigger.ChildStateMachineComplete);
         }
 
-        public override void Fire(Trigger trigger)
+        private void CreateCorporationDiscardDownToMaxHandSizeStateMachine()
         {
-            _Machine.Fire(trigger);
-        }
-
-        public override bool CanFire(Trigger trigger)
-        {
-            return _Machine.CanFire(trigger);
-        }
-
-        internal override void Start()
-        {
-            Fire(Trigger.Auto);
+            AddChild(new CorporationDiscardDownToMaxHandSizeStateMachine(GameFlow));
         }
 
         public override string Description
@@ -135,11 +138,6 @@ namespace NetRunner.Core.GameFlow
                         throw new NotSupportedException();
                 }
             }
-        }
-
-        public override IEnumerable<Trigger> PermittedTriggers
-        {
-            get { return _Machine.PermittedTriggers; }
         }
     }
 }

@@ -92,7 +92,7 @@ namespace NetRunner.Core.GameManagement
             GameContextSerializer gameContextSerializer = new GameContextSerializer();
             Context = gameContextSerializer.Deserialize(corporationGameState.SerializedGameContext);
 
-            Flow = new Flow(corporationGameState.SerializedFlow);
+            Flow = new Flow(Context, corporationGameState.SerializedFlow);
         }
 
         public void TakeAction(ActionBase action)

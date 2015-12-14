@@ -38,6 +38,9 @@ namespace NetRunner.Core
         public int RunnerCredits { get; set; }
         public int CorporationCredits { get; set; }
 
+        public int RunnerClicks { get; set; }
+        public int CorporationClicks { get; set; }
+
         //TODO: Move this to the flow. The "current run" is a game flow concept and not a physical thing.
         public Run CurrentRun { get; set; }
 

@@ -28,5 +28,11 @@ namespace NetRunner.Core.GameFlow
         CorporationPasses,
         RunnerUsesPaidAbility,
         RunnerPasses,
+
+        // Corporation Action triggers
+        CorporationTakesOneCredit,
+
+        // Corporation disacrd phase triggers
+        CorporationDiscardsCardFromHQ,
     }
 }

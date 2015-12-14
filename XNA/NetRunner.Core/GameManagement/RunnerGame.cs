@@ -81,7 +81,7 @@ namespace NetRunner.Core.GameManagement
             GameContextSerializer gameContextSerializer = new GameContextSerializer();
             Context = gameContextSerializer.Deserialize(runnerGameState.SerializedGameContext);
 
-            Flow = new Flow(runnerGameState.SerializedFlow);
+            Flow = new Flow(Context, runnerGameState.SerializedFlow);
         }
 
         public void TakeAction(ActionBase action)
