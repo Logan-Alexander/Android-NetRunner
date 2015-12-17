@@ -11,7 +11,6 @@ namespace NetRunner.UI.Xna.Visuals
     {
         private Game _Game;
         protected INetRunnerSoundManager _SoundManager;
-        protected ICardsUI _CardsUI;
 
         public bool IsActive { get; private set; }
 
@@ -21,7 +20,6 @@ namespace NetRunner.UI.Xna.Visuals
         {
             _Game = game;
             _SoundManager = (INetRunnerSoundManager)game.Services.GetService(typeof(INetRunnerSoundManager));
-            _CardsUI = (ICardsUI)game.Services.GetService(typeof(ICardsUI));
         }
 
         public virtual void Activate()

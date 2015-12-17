@@ -90,6 +90,7 @@
     <Compile Include="Visuals\CardAnimations\SimpleCardAnimation.cs" />
     <Compile Include="Visuals\CorporationDrawsCardVisual.cs" />
     <Compile Include="Visuals\CorporationPassesVisual.cs" />
+    <Compile Include="Visuals\CorporationGameLoadedGameVisual.cs" />
     <Compile Include="Visuals\RunnerPassesVisual.cs" />
     <Compile Include="Visuals\Visual.cs" />
   </ItemGroup>

@@ -27,7 +27,13 @@ namespace NetRunner.UI.Xna.Components
             _CorporationGameService =
                 (ICorporationGameService)Game.Services.GetService(typeof(ICorporationGameService));
 
+            _CorporationGameService.CorporationGame.GameLoaded += CorporationGame_GameLoaded;
             _CorporationGameService.CorporationGame.ActionTaken += CorporationGame_ActionTaken;
+        }
+
+        private void CorporationGame_GameLoaded(object sender, EventArgs e)
+        {
+            _VisualQueue.Enqueue(new CorporationGameLoadedGameVisual(Game, _CorporationGameService.CorporationGame));
         }
 
         private void CorporationGame_ActionTaken(object sender, Core.Actions.ActionEventArgs e)

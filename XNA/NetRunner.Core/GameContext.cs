@@ -115,7 +115,9 @@ namespace NetRunner.Core
 
             for (int index = 0; index < 5; ++index)
             {
-                Grip.Add(Stack.RemoveTopCard());
+                Card card = Stack.RemoveTopCard();
+                card.KnownToRunner = true;
+                Grip.Add(card);
             }
 
             foreach (CardBehaviourID cardBehaviourID in gameSetup.CorporationDeck)
@@ -129,7 +131,9 @@ namespace NetRunner.Core
 
             for (int index = 0; index < 5; ++index)
             {
-                HeadQuarters.Hand.Add(ResearchAndDevelopment.RemoveTopCard());
+                Card card = ResearchAndDevelopment.RemoveTopCard();
+                card.KnownToCorporation = true;
+                HeadQuarters.Hand.Add(card);
             }
 
             RunnerCredits = 5;

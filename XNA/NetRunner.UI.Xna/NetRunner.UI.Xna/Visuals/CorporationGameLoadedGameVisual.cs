@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using NetRunner.Core;
+using NetRunner.Core.GameManagement;
 using NetRunner.UI.Xna.Components;
-using NetRunner.UI.Xna.Visuals.CardAnimations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +8,14 @@ using System.Text;
 
 namespace NetRunner.UI.Xna.Visuals
 {
-    public class CorporationDrawsCardVisual : Visual
+    public class CorporationGameLoadedGameVisual : Visual
     {
-        private Card _Card;
+        protected CorporationGame _CorporationGame;
 
-        public CorporationDrawsCardVisual(Game game, Card card)
+        public CorporationGameLoadedGameVisual(Game game, CorporationGame corporationGame)
             : base(game)
         {
-            _Card = card;
+            _CorporationGame = corporationGame;
         }
 
         public override void Activate()
@@ -28,11 +27,11 @@ namespace NetRunner.UI.Xna.Visuals
             _SoundManager.Play(NetRunnerSound.Boop);
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            if (DurationSinceActivation > TimeSpan.FromSeconds(0.75))
+            if (DurationSinceActivation > TimeSpan.FromSeconds(0.5))
             {
                 IsComplete = true;
             }

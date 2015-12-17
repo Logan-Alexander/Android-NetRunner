@@ -175,27 +175,20 @@ namespace NetRunner.UI.Xna
             spriteBatch.Begin();
 
             // TEMPORARY: Color each area to show that the layout works.
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.ToTheRunner, Color.Red * 0.9f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Content, Color.Blue * 0.9f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CardList, Color.Blue * 0.8f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Console, Color.Blue * 0.7f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Menu, Color.White);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CardCloseUp, Color.Blue * 0.6f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Status, Color.Blue * 0.5f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.Summary, Color.Blue * 0.4f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.IceArea, Color.SkyBlue * 0.75f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.ServersArea, Color.SkyBlue * 0.75f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.StuffArea, Color.SkyBlue * 0.75f);
+            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CreditsArea, Color.SkyBlue * 0.75f);
 
-            // TEMPORARY: Write the descrioption of the game flow to the "Console" area.
-            int x = _LayoutService.CorporationLayout.Console.X + 8;
-            int y = _LayoutService.CorporationLayout.Console.Top + 8;
-
+            // TEMPORARY: Draw the description of the game flow.
             string state = _LocalGame.CorporationGame.Flow.ToString();
-            spriteBatch.DrawString(font1, state, new Vector2(x, y), Color.White);
+            spriteBatch.DrawString(font1, state, new Vector2(8, 0), Color.White);
 
             int corpHandCount = _LocalGame.CorporationGame.Context.HeadQuarters.Hand.Count;
             string corpInfo = string.Format("The corporation has {0} card(s) in their hand.", corpHandCount);
-            spriteBatch.DrawString(font1, corpInfo, new Vector2(x, y + 16), Color.White);
+            spriteBatch.DrawString(font1, corpInfo, new Vector2(8, 16), Color.White);
 
-            // TEMPROARY: Write the list of available actions to the "Status" area.
+            // TEMPROARY: Draw the list of available actions.
             List<string> actions = new List<string>();
             foreach (Trigger trigger in _LocalGame.CorporationGame.Flow.CurrentStateMachine.PermittedTriggers)
             {
@@ -235,19 +228,14 @@ namespace NetRunner.UI.Xna
                 }
             }
 
-            x = _LayoutService.CorporationLayout.Status.Left + 8;
-            y = _LayoutService.CorporationLayout.Status.Top + 8;
-
+            int y = 32;
             foreach (string action in actions)
             {
-                spriteBatch.DrawString(font1, action, new Vector2(x, y), Color.White);
+                spriteBatch.DrawString(font1, action, new Vector2(8, y), Color.White);
                 y += 32;
             }
 
             spriteBatch.End();
-
-
-
 
             base.Draw(gameTime);
         }

@@ -15,6 +15,16 @@ namespace NetRunner.Core.GameManagement
     /// </summary>
     public class CorporationGame
     {
+        public event EventHandler GameLoaded;
+        protected void OnGameLoaded(EventArgs e)
+        {
+            EventHandler temp = GameLoaded;
+            if (temp != null)
+            {
+                temp(this, e);
+            }
+        }
+        
         public event EventHandler GameOutOfSync;
         protected void OnGameOutOfSync(EventArgs e)
         {
@@ -93,6 +103,8 @@ namespace NetRunner.Core.GameManagement
             Context = gameContextSerializer.Deserialize(corporationGameState.SerializedGameContext);
 
             Flow = new Flow(Context, corporationGameState.SerializedFlow);
+
+            OnGameLoaded(new EventArgs());
         }
 
         public void TakeAction(ActionBase action)

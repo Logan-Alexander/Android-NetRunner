@@ -13,6 +13,7 @@ namespace NetRunner.UI.Xna.Components
         bool TryFindCard(Card card, out DrawableCard drawableCard);
 
         DrawableCard CreateCard(Card card, ICardLocation location);
+        void RemoveCard(DrawableCard card);
     }
 
     /// <summary>
@@ -210,6 +211,11 @@ namespace NetRunner.UI.Xna.Components
             _Cards.Add(drawableCard);
             
             return drawableCard;
+        }
+
+        public void RemoveCard(DrawableCard card)
+        {
+            _Cards.Remove(card);
         }
     }
 }
