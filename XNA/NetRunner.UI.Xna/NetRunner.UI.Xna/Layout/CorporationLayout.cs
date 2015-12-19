@@ -37,6 +37,11 @@ namespace NetRunner.UI.Xna.Layout
         public Rectangle StuffArea { get; private set; }
         public Rectangle CreditsArea { get; private set; }
 
+        public Rectangle ArchivesArea { get; private set; }
+        public Rectangle ResearchAndDevelopmentArea { get; private set; }
+        public Rectangle HeadQuartersArea { get; private set; }
+        public Rectangle RemoteServersArea { get; private set; }
+
         public CorporationLayout(Rectangle titleSafeArea)
         {
             Margin = (int)(titleSafeArea.Width / 100);
@@ -79,6 +84,30 @@ namespace NetRunner.UI.Xna.Layout
                 Margin,
                 iceAreaWidth,
                 iceAreaHeight);
+
+            ArchivesArea = new Rectangle(
+                ServersArea.Right - cardWidth,
+                ServersArea.Top,
+                cardWidth,
+                cardHeight);
+
+            ResearchAndDevelopmentArea = new Rectangle(
+                ArchivesArea.Left - (cardWidth + Margin),
+                ServersArea.Top,
+                cardWidth,
+                cardHeight);
+
+            HeadQuartersArea = new Rectangle(
+                ResearchAndDevelopmentArea.Left - (cardWidth + Margin),
+                ServersArea.Top,
+                cardWidth,
+                cardHeight);
+
+            RemoteServersArea = new Rectangle(
+                ServersArea.Left,
+                ServersArea.Top,
+                ServersArea.Width - (ArchivesArea.Width + Margin + ResearchAndDevelopmentArea.Width + Margin + HeadQuartersArea.Width + Margin),
+                cardHeight);
         }
     }
 }

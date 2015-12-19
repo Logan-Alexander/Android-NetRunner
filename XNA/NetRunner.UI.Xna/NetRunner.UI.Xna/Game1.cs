@@ -28,6 +28,7 @@ namespace NetRunner.UI.Xna
         SpriteFont font1;
         Texture2D _TemporaryTexture;
 
+        private Background _Background;
         private ConsoleUI _Console;
         private KeyboardManager _KeyboardManager;
         private LocalGameComponent _LocalGame;
@@ -51,6 +52,7 @@ namespace NetRunner.UI.Xna
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
 
+            _Background = new Background(this);
             _KeyboardManager = new KeyboardManager(this);
             _LocalGame = new LocalGameComponent(this);
             _Camera = new Camera(this);
@@ -170,15 +172,9 @@ namespace NetRunner.UI.Xna
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            base.Draw(gameTime);
 
             spriteBatch.Begin();
-
-            // TEMPORARY: Color each area to show that the layout works.
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.IceArea, Color.SkyBlue * 0.75f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.ServersArea, Color.SkyBlue * 0.75f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.StuffArea, Color.SkyBlue * 0.75f);
-            spriteBatch.Draw(_TemporaryTexture, _LayoutService.CorporationLayout.CreditsArea, Color.SkyBlue * 0.75f);
 
             // TEMPORARY: Draw the description of the game flow.
             string state = _LocalGame.CorporationGame.Flow.ToString();
@@ -236,8 +232,6 @@ namespace NetRunner.UI.Xna
             }
 
             spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }
