@@ -24,6 +24,14 @@ namespace NetRunner.UI.Xna.Components
 
         private Rectangle _Bounds;
 
+        public PlayerType Player { get; set; }
+
+        public enum PlayerType
+        {
+            Corporation,
+            Runner
+        }
+
         public Background(Game game)
             : base(game)
         {
@@ -89,15 +97,26 @@ namespace NetRunner.UI.Xna.Components
 
             _SpriteBatch.Begin();
 
-            _SpriteBatch.Draw(_CorporationBackground, _Bounds, Color.White);
+            switch (Player)
+            {
+                case PlayerType.Corporation:
+                    _SpriteBatch.Draw(_CorporationBackground, _Bounds, Color.White);
+                    DrawCorporationBox(_LayoutService.CorporationLayout.IceArea, "ICE");
+                    DrawCorporationBox(_LayoutService.CorporationLayout.ScoreArea, "SCORE AREA");
+                    DrawCorporationBox(_LayoutService.CorporationLayout.CreditsArea, "CREDITS");
+                    DrawCorporationBox(_LayoutService.CorporationLayout.ArchivesArea, "ARCHIVES");
+                    DrawCorporationBox(_LayoutService.CorporationLayout.ResearchAndDevelopmentArea, "R&D");
+                    DrawCorporationBox(_LayoutService.CorporationLayout.HeadQuartersArea, "HEADQUARTERS");
+                    DrawCorporationBox(_LayoutService.CorporationLayout.RemoteServersArea, "REMOTE SERVERS");
+                    break;
 
-            DrawCorporationBox(_LayoutService.CorporationLayout.IceArea, "ICE");
-            DrawCorporationBox(_LayoutService.CorporationLayout.ScoreArea, "SCORE AREA");
-            DrawCorporationBox(_LayoutService.CorporationLayout.CreditsArea, "CREDITS");
-            DrawCorporationBox(_LayoutService.CorporationLayout.ArchivesArea, "ARCHIVES");
-            DrawCorporationBox(_LayoutService.CorporationLayout.ResearchAndDevelopmentArea, "R&D");
-            DrawCorporationBox(_LayoutService.CorporationLayout.HeadQuartersArea, "HEADQUARTERS");
-            DrawCorporationBox(_LayoutService.CorporationLayout.RemoteServersArea, "REMOTE SERVERS");
+                case PlayerType.Runner:
+                    //TODO: Draw the runner's background!!!
+                    break;
+
+                default:
+                    throw new NotSupportedException();
+            }
 
             _SpriteBatch.End();
         }

@@ -62,6 +62,10 @@ namespace NetRunner.UI.Xna
             _LayoutService = new LayoutService(this);
 
             _Console = new ConsoleUI(this);
+
+            // TEMP: Choose which background to draw!
+            _Background.Player = Background.PlayerType.Corporation;
+            //_Background.Player = Background.PlayerType.Runner;
         }
 
         /// <summary>
