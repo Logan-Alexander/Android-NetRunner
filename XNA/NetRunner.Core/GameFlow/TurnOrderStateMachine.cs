@@ -44,6 +44,7 @@ namespace NetRunner.Core.GameFlow
                 .Permit(Trigger.Auto, StateName.Corp_1_1_PaidAbilityWindow);
 
             machine.Configure(StateName.Corp_1_1_PaidAbilityWindow)
+                .OnEntry(() => GameFlow.Context.CorporationClicks = 3)
                 .OnEntry(() => CreatePaidAbilityWindowStateMachine(
                     PlayerType.Corporation,
                     PaidAbilityWindowOptions.UseRezScore))
@@ -55,7 +56,7 @@ namespace NetRunner.Core.GameFlow
                 .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_1_3_DrawOneCard);
 
             machine.Configure(StateName.Corp_1_3_DrawOneCard)
-                .Permit(Trigger.CorporationCardDrawn, StateName.Corp_2_1_PaidAbilityWindow);
+                .Permit(Trigger.CorporationDrawsCardAtStartOfTurn, StateName.Corp_2_1_PaidAbilityWindow);
 
             machine.Configure(StateName.Corp_2_1_PaidAbilityWindow)
                 .OnEntry(() => CreatePaidAbilityWindowStateMachine(
@@ -64,10 +65,9 @@ namespace NetRunner.Core.GameFlow
                 .Permit(Trigger.ChildStateMachineComplete, StateName.Corp_2_2_TakeActions);
 
             machine.Configure(StateName.Corp_2_2_TakeActions)
-                .OnEntry(() => GameFlow.Context.CorporationClicks = 3)
                 .OnEntry(() => CreateCorporationActionsStateMachine())
                 .PermitDynamic(Trigger.ChildStateMachineComplete,
-                    () => GameFlow.Context.HeadQuarters.Hand.Count > 5 // TODO: Corporation hand limit might not be 5...
+                    () => GameFlow.Context.HeadQuarters.Hand.Count > GameFlow.Context.CorporationHandLimit
                         ? StateName.Corp_3_1_DiscardDownToMaxHandSize
                         : StateName.Corp_3_2_PaidAbilityWindow);
 

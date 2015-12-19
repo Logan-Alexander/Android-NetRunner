@@ -35,7 +35,7 @@ namespace NetRunner.Core.GameFlow
         {
             machine.Configure(StateName.ChoosingCardToDiscard)
                 .PermitDynamic(Trigger.CorporationDiscardsCardFromHQ,
-                    () => GameFlow.Context.HeadQuarters.Hand.Count > 5
+                    () => GameFlow.Context.HeadQuarters.Hand.Count > GameFlow.Context.CorporationHandLimit
                         ? StateName.ChoosingCardToDiscard
                         : StateName.Complete);
 

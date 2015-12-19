@@ -19,7 +19,7 @@ namespace NetRunner.Core.GameFlow
         GameStarts,
 
         // Turn Order triggers
-        CorporationCardDrawn,
+        CorporationDrawsCardAtStartOfTurn,
 
         // Paid Ability Window triggers
         CorporationUsesPaidAbility,
@@ -30,6 +30,7 @@ namespace NetRunner.Core.GameFlow
         RunnerPasses,
 
         // Corporation Action triggers
+        CorporationDrawsCardAsAction,
         CorporationTakesOneCredit,
 
         // Corporation disacrd phase triggers

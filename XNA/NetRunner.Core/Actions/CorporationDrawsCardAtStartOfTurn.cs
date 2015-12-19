@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetRunner.Core.Actions
 {
-    public class CorporationDrawsCard : ActionBase
+    public class CorporationDrawsCardAtStartOfTurn : ActionBase
     {
         /// <summary>
         /// The ID of the card that was drawn.
@@ -14,14 +14,14 @@ namespace NetRunner.Core.Actions
         public CardBehaviourID CardBehaviourID { get; private set; }
         public Card Card { get; private set; }
         
-        public CorporationDrawsCard()
+        public CorporationDrawsCardAtStartOfTurn()
         {
             DeferExecution = true;
         }
 
         protected override bool IsFlowValid(Flow flow)
         {
-            return flow.CanFire(Trigger.CorporationCardDrawn);
+            return flow.CanFire(Trigger.CorporationDrawsCardAtStartOfTurn);
         }
 
         public override void ApplyToCorporation(GameContext context, Flow flow)
@@ -38,7 +38,7 @@ namespace NetRunner.Core.Actions
             Card.KnownToCorporation = true;
             context.HeadQuarters.Hand.Add(Card);
 
-            flow.Fire(Trigger.CorporationCardDrawn);
+            flow.Fire(Trigger.CorporationDrawsCardAtStartOfTurn);
 
             base.ApplyToAll(context, flow);
         }
@@ -51,12 +51,12 @@ namespace NetRunner.Core.Actions
 
         protected override ActionBase CreateInstanceForClone()
         {
-            return new CorporationDrawsCard();
+            return new CorporationDrawsCardAtStartOfTurn();
         }
 
         public override ActionBase Clone()
         {
-            CorporationDrawsCard clone = (CorporationDrawsCard)base.Clone();
+            CorporationDrawsCardAtStartOfTurn clone = (CorporationDrawsCardAtStartOfTurn)base.Clone();
             clone.CardBehaviourID = this.CardBehaviourID;
             return clone;
         }

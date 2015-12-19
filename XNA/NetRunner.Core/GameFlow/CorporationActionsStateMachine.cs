@@ -50,6 +50,7 @@ namespace NetRunner.Core.GameFlow
         protected override void ConfigureStateMachine(Stateless.StateMachine<CorporationActionsStateMachine.StateName, Trigger> machine)
         {
             machine.Configure(StateName.ChoosingAction)
+                .PermitIf(Trigger.CorporationDrawsCardAsAction, StateName.AfterActionPaidAbilityWindow, () => GameFlow.Context.ResearchAndDevelopment.DrawPile.Any())
                 .Permit(Trigger.CorporationTakesOneCredit, StateName.AfterActionPaidAbilityWindow);
 
             machine.Configure(StateName.AfterActionPaidAbilityWindow)

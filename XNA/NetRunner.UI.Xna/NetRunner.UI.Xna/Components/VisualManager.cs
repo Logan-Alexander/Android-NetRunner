@@ -48,9 +48,9 @@ namespace NetRunner.UI.Xna.Components
                 _VisualQueue.Enqueue(new RunnerPassesVisual(Game));
             }
 
-            if (e.Action is CorporationDrawsCard)
+            if (e.Action is CorporationDrawsCardAtStartOfTurn)
             {
-                CorporationDrawsCard action = (CorporationDrawsCard)e.Action;
+                CorporationDrawsCardAtStartOfTurn action = (CorporationDrawsCardAtStartOfTurn)e.Action;
 
                 _VisualQueue.Enqueue(new CorporationDrawsCardVisual(Game, action.Card));
             }

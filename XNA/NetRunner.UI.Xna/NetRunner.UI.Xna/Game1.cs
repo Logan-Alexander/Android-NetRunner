@@ -139,7 +139,14 @@ namespace NetRunner.UI.Xna
             if (_KeyboardManager.IsKeyPressed(Keys.D3, true))
             {
                 Debug.WriteLine("Corporation draws card.");
-                _LocalGame.TakeCorporationAction(new CorporationDrawsCard());
+                if (_LocalGame.CorporationGame.Flow.CanFire(Trigger.CorporationDrawsCardAtStartOfTurn))
+                {
+                    _LocalGame.TakeCorporationAction(new CorporationDrawsCardAtStartOfTurn());
+                }
+                else
+                {
+                    _LocalGame.TakeCorporationAction(new CorporationDrawsCardAsAction());
+                }
             }
 
             if (_KeyboardManager.IsKeyPressed(Keys.D4, true))
@@ -190,7 +197,7 @@ namespace NetRunner.UI.Xna
             {
                 switch (trigger)
                 {
-                    case Trigger.CorporationCardDrawn:
+                    case Trigger.CorporationDrawsCardAtStartOfTurn:
                         actions.Add("- Draw card at start of turn");
                         break;
 
@@ -208,6 +215,10 @@ namespace NetRunner.UI.Xna
 
                     case Trigger.CorporationUsesPaidAbility:
                         actions.Add("- Use paid ability");
+                        break;
+
+                    case Trigger.CorporationDrawsCardAsAction:
+                        actions.Add("- Draw card");
                         break;
 
                     case Trigger.CorporationTakesOneCredit:

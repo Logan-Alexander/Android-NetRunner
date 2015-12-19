@@ -64,7 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionEventArgs.cs" />
-    <Compile Include="Actions\CorporationDrawsCard.cs" />
+    <Compile Include="Actions\CorporationDrawsCardAsAction.cs" />
+    <Compile Include="Actions\CorporationDrawsCardAtStartOfTurn.cs" />
     <Compile Include="Actions\CorporationDiscardsCardFromHQ.cs" />
     <Compile Include="Actions\CorporationTakesOneCredit.cs" />
     <Compile Include="Actions\CorporationScoresAgenda.cs" />

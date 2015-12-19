@@ -97,7 +97,7 @@ namespace NetRunner.UI.Console
             // When used in a real game loop, this wont be an issue (aside from a 1 frame delay).
             inMemoryConnector.Update();
 
-            corporationGame.TakeAction(new CorporationDrawsCard());
+            corporationGame.TakeAction(new CorporationDrawsCardAtStartOfTurn());
             inMemoryConnector.Update();
 
             // This concludes the draw phase so we should now be in the action phase.

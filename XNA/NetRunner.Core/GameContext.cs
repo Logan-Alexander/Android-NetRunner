@@ -177,5 +177,23 @@ namespace NetRunner.Core
 
             HeadQuarters.FactionCard = card;
         }
+
+        public int RunnerHandLimit
+        {
+            get
+            {
+                // TODO: Checks for cards in play with effects that modify this limit.
+                return 5;
+            }
+        }
+
+        public int CorporationHandLimit
+        {
+            get
+            {
+                // TODO: Checks for cards in play with effects that modify this limit.
+                return 5;
+            }
+        }
     }
 }
