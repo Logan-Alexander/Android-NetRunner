@@ -32,6 +32,8 @@ namespace NetRunner.UI.Xna.Layout
 
         public int Margin { get; private set; }
 
+        public Vector2 CardSize { get; private set; }
+
         public Rectangle IceArea { get; private set; }
         public Rectangle ServersArea { get; private set; }
         public Rectangle StuffArea { get; private set; }
@@ -41,6 +43,7 @@ namespace NetRunner.UI.Xna.Layout
         public Rectangle ResearchAndDevelopmentArea { get; private set; }
         public Rectangle HeadQuartersArea { get; private set; }
         public Rectangle RemoteServersArea { get; private set; }
+        public Rectangle ScoreArea { get; private set; }
 
         public CorporationLayout(Rectangle titleSafeArea)
         {
@@ -48,6 +51,8 @@ namespace NetRunner.UI.Xna.Layout
 
             int cardWidth = (int)(titleSafeArea.Width / 10);
             int cardHeight = (int)(cardWidth / 0.7);
+
+            CardSize = new Vector2(cardWidth, cardHeight);
 
             int creditsAreaWidth = cardWidth;
             int creditsAreaHeight = cardHeight;
@@ -107,6 +112,12 @@ namespace NetRunner.UI.Xna.Layout
                 ServersArea.Left,
                 ServersArea.Top,
                 ServersArea.Width - (ArchivesArea.Width + Margin + ResearchAndDevelopmentArea.Width + Margin + HeadQuartersArea.Width + Margin),
+                cardHeight);
+
+            ScoreArea = new Rectangle(
+                StuffArea.Left,
+                StuffArea.Top,
+                cardWidth,
                 cardHeight);
         }
     }
