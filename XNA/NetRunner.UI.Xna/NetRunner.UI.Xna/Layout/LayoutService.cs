@@ -9,6 +9,7 @@ namespace NetRunner.UI.Xna.Layout
     public class LayoutService : GameComponent, ILayoutService
     {
         public CorporationLayout CorporationLayout { get; private set; }
+        public RunnerLayout RunnerLayout { get; private set; }
 
         public LayoutService(Game game)
             : base(game)
@@ -26,7 +27,9 @@ namespace NetRunner.UI.Xna.Layout
 
         private void Window_ClientSizeChanged(object sender, EventArgs e)
         {
-            CorporationLayout = new CorporationLayout(Game.GraphicsDevice.Viewport.TitleSafeArea);
+            //Probably shouldn't do both of these, but it's fine for now and a check seems difficult.
+            CorporationLayout = new CorporationLayout(Game.GraphicsDevice.Viewport.TitleSafeArea); 
+            RunnerLayout = new RunnerLayout(Game.GraphicsDevice.Viewport.TitleSafeArea);
         }
     }
 }

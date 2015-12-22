@@ -63,25 +63,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\CorpBox-C-TopLeft.png">
-      <Name>CorpBox-C-TopLeft</Name>
+    <Compile Include="Textures\Box-C-TopLeft.png">
+      <Name>Box-C-TopLeft</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\CorpBox-E-Top.png">
-      <Name>CorpBox-E-Top</Name>
+    <Compile Include="Textures\Box-E-Left.png">
+      <Name>Box-E-Left</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\CorpBox-M.png">
-      <Name>CorpBox-M</Name>
+    <Compile Include="Textures\Box-E-Top.png">
+      <Name>Box-E-Top</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\CorpBox-E-Left.png">
-      <Name>CorpBox-E-Left</Name>
+    <Compile Include="Textures\Box-M.png">
+      <Name>Box-M</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

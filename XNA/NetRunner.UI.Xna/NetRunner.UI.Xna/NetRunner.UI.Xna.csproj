@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Background.cs" />
+    <Compile Include="Layout\RunnerLayout.cs" />
     <Compile Include="Layout\CorporationLayout.cs" />
     <Compile Include="Layout\ILayoutService.cs" />
     <Compile Include="DrawableCard.cs" />

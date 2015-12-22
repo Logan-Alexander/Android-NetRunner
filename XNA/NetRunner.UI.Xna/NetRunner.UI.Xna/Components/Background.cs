@@ -83,16 +83,18 @@ namespace NetRunner.UI.Xna.Components
             _Font = Game.Content.Load<SpriteFont>("Fonts/SpriteFont1");
 
             _CorporationBackground = Game.Content.Load<Texture2D>("Textures/CorpMat");
-            _CorporationBoxTopLeftCorner = Game.Content.Load<Texture2D>("Textures/CorpBox-C-TopLeft");
-            _CorporationBoxTopEdge = Game.Content.Load<Texture2D>("Textures/CorpBox-E-Top");
-            _CorporationBoxLeftEdge = Game.Content.Load<Texture2D>("Textures/CorpBox-E-Left");
-            _CorporationBoxMiddle = Game.Content.Load<Texture2D>("Textures/CorpBox-M");
+            _CorporationBoxTopLeftCorner = Game.Content.Load<Texture2D>("Textures/Box-C-TopLeft");
+            _CorporationBoxTopEdge = Game.Content.Load<Texture2D>("Textures/Box-E-Top");
+            _CorporationBoxLeftEdge = Game.Content.Load<Texture2D>("Textures/Box-E-Left");
+            _CorporationBoxMiddle = Game.Content.Load<Texture2D>("Textures/Box-M");
 
             _Bounds = DetermineBounds();
         }
 
         public override void Draw(GameTime gameTime)
         {
+            Color corpBlue = new Color(45, 130, 255);
+
             GraphicsDevice.Clear(Color.Black);
 
             _SpriteBatch.Begin();
@@ -101,17 +103,26 @@ namespace NetRunner.UI.Xna.Components
             {
                 case PlayerType.Corporation:
                     _SpriteBatch.Draw(_CorporationBackground, _Bounds, Color.White);
-                    DrawCorporationBox(_LayoutService.CorporationLayout.IceArea, "ICE");
-                    DrawCorporationBox(_LayoutService.CorporationLayout.ScoreArea, "SCORE AREA");
-                    DrawCorporationBox(_LayoutService.CorporationLayout.CreditsArea, "CREDITS");
-                    DrawCorporationBox(_LayoutService.CorporationLayout.ArchivesArea, "ARCHIVES");
-                    DrawCorporationBox(_LayoutService.CorporationLayout.ResearchAndDevelopmentArea, "R&D");
-                    DrawCorporationBox(_LayoutService.CorporationLayout.HeadQuartersArea, "HEADQUARTERS");
-                    DrawCorporationBox(_LayoutService.CorporationLayout.RemoteServersArea, "REMOTE SERVERS");
+                    DrawBox(_LayoutService.CorporationLayout.IceArea, "ICE", corpBlue);
+                    DrawBox(_LayoutService.CorporationLayout.ScoreArea, "SCORE AREA", corpBlue);
+                    DrawBox(_LayoutService.CorporationLayout.CreditsArea, "CREDITS", corpBlue);
+                    DrawBox(_LayoutService.CorporationLayout.ArchivesArea, "ARCHIVES", corpBlue);
+                    DrawBox(_LayoutService.CorporationLayout.ResearchAndDevelopmentArea, "R&D", corpBlue);
+                    DrawBox(_LayoutService.CorporationLayout.HeadQuartersArea, "HEADQUARTERS", corpBlue);
+                    DrawBox(_LayoutService.CorporationLayout.RemoteServersArea, "REMOTE SERVERS", corpBlue);
                     break;
 
                 case PlayerType.Runner:
-                    //TODO: Draw the runner's background!!!
+                    _SpriteBatch.Draw(_CorporationBackground, _Bounds, Color.White);
+                    DrawBox(_LayoutService.RunnerLayout.ConsoleArea, "CONSOLE", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.CreditsArea, "CREDITS", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.HardwareArea, "HARDWARE", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.HeapArea, "HEAP", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.IdentityArea, "ID", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.ProgramArea, "PROGRAMS", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.ResourcesArea, "RESOURCES", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.ScoreArea, "SCORE AREA", Color.Red);
+                    DrawBox(_LayoutService.RunnerLayout.StackArea, "STACK", Color.Red);
                     break;
 
                 default:
@@ -121,7 +132,7 @@ namespace NetRunner.UI.Xna.Components
             _SpriteBatch.End();
         }
         
-        private void DrawCorporationBox(Rectangle rectangle, string text)
+        private void DrawBox(Rectangle rectangle, string text, Color color)
         {
             float cornerScale = _LayoutService.CorporationLayout.CardSize.X / 512;
 
@@ -133,20 +144,20 @@ namespace NetRunner.UI.Xna.Components
             Rectangle bottomLeft = new Rectangle(rectangle.Left, rectangle.Bottom - cornerHeight, cornerWidth, cornerHeight);
             Rectangle bottomRight = new Rectangle(rectangle.Right - cornerWidth, rectangle.Bottom - cornerHeight, cornerWidth, cornerHeight);
 
-            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, topLeft, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
-            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, topRight, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, bottomLeft, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0);
-            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, bottomRight, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically, 0);
+            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, topLeft, null, color, 0, Vector2.Zero, SpriteEffects.None, 0);
+            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, topRight, null, color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, bottomLeft, null, color, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0);
+            _SpriteBatch.Draw(_CorporationBoxTopLeftCorner, bottomRight, null, color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically, 0);
 
             Rectangle top = new Rectangle(rectangle.Left + cornerWidth, rectangle.Top, rectangle.Width - (2 * cornerWidth), cornerHeight);
             Rectangle bottom = new Rectangle(rectangle.Left + cornerWidth, rectangle.Bottom - cornerHeight, rectangle.Width - (2 * cornerWidth), cornerHeight);
             Rectangle left = new Rectangle(rectangle.Left, rectangle.Top + cornerHeight, cornerWidth, rectangle.Height - (2 * cornerHeight));
             Rectangle right = new Rectangle(rectangle.Right - cornerWidth, rectangle.Top + cornerHeight, cornerWidth, rectangle.Height - (2 * cornerHeight));
 
-            _SpriteBatch.Draw(_CorporationBoxTopEdge, top, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
-            _SpriteBatch.Draw(_CorporationBoxTopEdge, bottom, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0);
-            _SpriteBatch.Draw(_CorporationBoxLeftEdge, left, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
-            _SpriteBatch.Draw(_CorporationBoxLeftEdge, right, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+            _SpriteBatch.Draw(_CorporationBoxTopEdge, top, null, color, 0, Vector2.Zero, SpriteEffects.None, 0);
+            _SpriteBatch.Draw(_CorporationBoxTopEdge, bottom, null, color, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0);
+            _SpriteBatch.Draw(_CorporationBoxLeftEdge, left, null, color, 0, Vector2.Zero, SpriteEffects.None, 0);
+            _SpriteBatch.Draw(_CorporationBoxLeftEdge, right, null, color, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
 
             Rectangle middle = new Rectangle(
                 rectangle.Left + cornerWidth,
@@ -154,7 +165,7 @@ namespace NetRunner.UI.Xna.Components
                 rectangle.Width - (2 * cornerWidth),
                 rectangle.Height - (2 * cornerHeight));
 
-            _SpriteBatch.Draw(_CorporationBoxMiddle, middle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+            _SpriteBatch.Draw(_CorporationBoxMiddle, middle, null, color, 0, Vector2.Zero, SpriteEffects.None, 0);
 
             float textScale = _LayoutService.CorporationLayout.CardSize.Y / (25 * _Font.MeasureString("X").X);
 
